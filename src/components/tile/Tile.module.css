@@ -1,0 +1,21 @@
+.tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 8rem;
+  height: 8rem;
+  border: 1px solid #e0e0e0;
+  /* background-color: #f5f5f5; */
+  /* border-radius: 10px; */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  .active {
+    width: 4rem;
+    height: 4rem;
+    background-image: url("/public/vite.svg");
+    background-size: cover;
+    background-position: center;
+  }
+}
