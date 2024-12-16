@@ -10,12 +10,7 @@
   /* border-radius: 10px; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-
-  .active {
-    width: 4rem;
-    height: 4rem;
-    background-image: url("/public/vite.svg");
-    background-size: cover;
-    background-position: center;
-  }
+}
+.grass {
+  background: url(/public/11510167.png) no-repeat center bottom / contain;
 }

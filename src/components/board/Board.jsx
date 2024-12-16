@@ -47,6 +47,12 @@ function Board(props) {
   return (
     <div>
       <div className={styles.board}>
+        <div
+          className={styles.image}
+          style={{
+            transform: `translate(${activeRow * 8}rem, ${activeCol * 8}rem)`,
+          }}
+        />
         {Array(cols)
           .fill()
           .map((_, colIndex) => {

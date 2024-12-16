@@ -2,13 +2,10 @@ import styles from "./Tile.module.css";
 import PropTypes from "prop-types";
 
 function Tile(props) {
+  // eslint-disable-next-line no-unused-vars
   const { isActive = false } = props;
 
-  return (
-    <div className={styles.tile}>
-      {isActive && <div className={styles.active}></div>}
-    </div>
-  );
+  return <div className={`${styles.tile} ${styles.grass}`}></div>;
 }
 
 export default Tile;
