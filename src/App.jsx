@@ -4,7 +4,7 @@ import Board from "./components/board";
 function App() {
   return (
     <>
-      <Board rows={8} cols={6} />
+      <Board rows={10} cols={15} />
     </>
   );
 }

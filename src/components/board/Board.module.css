@@ -10,11 +10,11 @@
   flex-direction: row;
 }
 
-.image {
-  margin: 2rem;
-  width: 4rem;
-  height: 4rem;
-  background: url(/public/vite.svg) no-repeat center center / contain;
+.mycharacter {
+  margin: 0.75rem;
+  width: 5rem;
+  height: 5rem;
+  background: url(/public/panda.svg) no-repeat center center / contain;
   position: absolute;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
