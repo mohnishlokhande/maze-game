@@ -15,6 +15,7 @@ function Board(props) {
   const [rotation, setRotation] = useState(0);
 
   const handleKeyDown = (event) => {
+    console.log("keydown", event.key);
     switch (event.key) {
       case "ArrowUp":
         setRotation(0);
@@ -74,7 +75,7 @@ function Board(props) {
   }, [rotation]);
 
   return (
-    <div tabIndex="0" onKeyDown={handleKeyDown} autoFocus>
+    <div tabIndex="0" onKeyDown={handleKeyDown}>
       <div className={styles.board}>
         <div
           className={styles.mycharacter}
