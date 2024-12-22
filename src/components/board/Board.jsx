@@ -12,78 +12,72 @@ function Board(props) {
   const [board] = useState(() => {
     return generateRandomBoard(rows, cols);
   });
-  const [activeRow, setActiveRow] = useState(0);
-  const [activeCol, setActiveCol] = useState(0);
-  const [dir, setDir] = useState(2);
-  const [vector, setVector] = useState(0);
+  const [activeRow, setActiveRow] = useState(() => 0);
+  const [activeCol, setActiveCol] = useState(() => 0);
+  const [alignment, setAlignment] = useState(() => 2);
+  const [vector, setVector] = useState(() => 0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleMovement = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-
+    console.log("##handleMovement", alignment, vector, activeRow, activeCol);
     const interval = setInterval(() => {
       setVector((prevIndex) => (prevIndex + 1) % 4);
-    }, 150);
+    }, 200);
 
     setTimeout(() => {
       clearInterval(interval);
       setVector(0);
       setIsTransitioning(false);
-    }, 600);
+    }, 800);
   };
 
-  const arrowKeys = () => {
+  const setPosition = (prev, newV, dir) => {
+    console.log("##P", dir, prev, "=>", newV);
+    const isRow = dir === 0 || dir === 2;
+    const limit = isRow ? rows : cols;
+    if (newV < 0 || newV >= limit) return prev;
+    const type = isRow
+      ? board[newV][activeCol].type
+      : board[activeRow][newV].type;
+
+    if (type === TILE_TYPES.ROCK) return prev;
+    else if (type === TILE_TYPES.WATER) setAlignment(4);
+    else setAlignment(dir);
     handleMovement();
+    return newV;
   };
 
   const handleKeyDown = (event) => {
-    console.log("keydown", event.key);
+    console.log("##keydown", event.key);
     switch (event.key) {
       case "ArrowUp":
-        arrowKeys();
-        setDir(0);
         setActiveRow((prevRow) => {
-          let newRow = (prevRow - 1 + rows) % rows;
-          if (board[newRow][activeCol].type === TILE_TYPES.ROCK) {
-            return prevRow;
-          } else if (board[newRow][activeCol].type === TILE_TYPES.WATER) {
-            setDir(4);
-          }
-          return newRow;
-        });
-        break;
-      case "ArrowDown":
-        arrowKeys();
-        setDir(2);
-        setActiveRow((prevRow) => {
-          let newRow = (prevRow + 1) % rows;
-          if (board[newRow][activeCol].type === TILE_TYPES.ROCK) {
-            return prevRow;
-          }
-          return newRow;
-        });
-        break;
-      case "ArrowLeft":
-        arrowKeys();
-        setDir(3);
-        setActiveCol((prevCol) => {
-          let newCol = (prevCol - 1 + cols) % cols;
-          if (board[activeRow][newCol].type === TILE_TYPES.ROCK) {
-            return prevCol;
-          }
-          return newCol;
+          let newRow = prevRow - 1;
+          console.log("##up", prevRow, newRow);
+          return setPosition(prevRow, newRow, 0);
         });
         break;
       case "ArrowRight":
-        arrowKeys();
-        setDir(1);
         setActiveCol((prevCol) => {
-          let newCol = (prevCol + 1) % cols;
-          if (board[activeRow][newCol].type === TILE_TYPES.ROCK) {
-            return prevCol;
-          }
-          return newCol;
+          let newCol = prevCol + 1;
+          console.log("##right", prevCol, newCol);
+          return setPosition(prevCol, newCol, 1);
+        });
+        break;
+      case "ArrowDown":
+        setActiveRow((prevRow) => {
+          let newRow = prevRow + 1;
+          console.log("##down", prevRow, newRow);
+          return setPosition(prevRow, newRow, 2);
+        });
+        break;
+      case "ArrowLeft":
+        setActiveCol((prevCol) => {
+          let newCol = prevCol - 1;
+          console.log("##left", prevCol, newCol);
+          return setPosition(prevCol, newCol, 3);
         });
         break;
       case " ":
@@ -101,7 +95,9 @@ function Board(props) {
     <div tabIndex="0" onKeyDown={handleKeyDown}>
       <div className={styles.board}>
         <div
-          className={`${styles.mycharacter} ${styles[charDirection[dir]]}`}
+          className={`${styles.mycharacter} ${
+            styles[charDirection[alignment]]
+          }`}
           style={{
             transform: `translate(${activeCol * 6}rem, ${activeRow * 6}rem)`,
             backgroundPosition: `${vector * -44}px 0`,

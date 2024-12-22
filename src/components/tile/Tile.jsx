@@ -7,11 +7,11 @@ function Tile(props) {
   const { isActive = false, tile = {} } = props;
   const { type } = tile;
   const content = {
-    [TILE_TYPES.GRASS]: "*",
-    [TILE_TYPES.WATER]: "~",
-    [TILE_TYPES.ROCK]: "||",
+    [TILE_TYPES.GRASS]: "☘️",
+    [TILE_TYPES.WATER]: "",
+    [TILE_TYPES.ROCK]: "⛰️",
     [TILE_TYPES.EMPTY]: "",
-    [TILE_TYPES.GAS_STATION]: "{}",
+    [TILE_TYPES.FOOD]: "🍎",
   };
 
   return (
