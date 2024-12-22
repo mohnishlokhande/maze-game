@@ -11,10 +11,26 @@
 }
 
 .mycharacter {
-  margin: 0.75rem;
-  width: 5rem;
-  height: 5rem;
-  background: url(/public/panda.svg) no-repeat center center / contain;
+  margin: 1.25rem;
+  width: 11rem;
+  height: 4rem;
   position: absolute;
-  transition: transform 0.5s ease;
+  transition: transform 0.8s ease;
+  clip-path: inset(0px 132px 0px 0px);
+}
+
+.moveD {
+  background: url(/playerDown.png) no-repeat center center / contain;
+}
+.moveU {
+  background: url(/playerUp.png) no-repeat center center / contain;
+}
+.moveR {
+  background: url(/playerRight.png) no-repeat center center / contain;
+}
+.moveL {
+  background: url(/playerLeft.png) no-repeat center center / contain;
+}
+.dragon {
+  background: url(/draggleSprite.png) no-repeat center center / contain;
 }

@@ -1,9 +1,11 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Tile from "../tile";
 import styles from "./Board.module.css";
 import PropTypes from "prop-types";
 import { TILE_TYPES } from "../../utils/constants";
 import { generateRandomBoard } from "../../utils/helper";
+
+const charDirection = ["moveU", "moveR", "moveD", "moveL", "dragon"];
 
 function Board(props) {
   const { rows, cols } = props;
@@ -12,23 +14,48 @@ function Board(props) {
   });
   const [activeRow, setActiveRow] = useState(0);
   const [activeCol, setActiveCol] = useState(0);
-  const [rotation, setRotation] = useState(0);
+  const [dir, setDir] = useState(2);
+  const [vector, setVector] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const handleMovement = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+
+    const interval = setInterval(() => {
+      setVector((prevIndex) => (prevIndex + 1) % 4);
+    }, 150);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      setVector(0);
+      setIsTransitioning(false);
+    }, 600);
+  };
+
+  const arrowKeys = () => {
+    handleMovement();
+  };
 
   const handleKeyDown = (event) => {
     console.log("keydown", event.key);
     switch (event.key) {
       case "ArrowUp":
-        setRotation(0);
+        arrowKeys();
+        setDir(0);
         setActiveRow((prevRow) => {
           let newRow = (prevRow - 1 + rows) % rows;
           if (board[newRow][activeCol].type === TILE_TYPES.ROCK) {
             return prevRow;
+          } else if (board[newRow][activeCol].type === TILE_TYPES.WATER) {
+            setDir(4);
           }
           return newRow;
         });
         break;
       case "ArrowDown":
-        setRotation(180);
+        arrowKeys();
+        setDir(2);
         setActiveRow((prevRow) => {
           let newRow = (prevRow + 1) % rows;
           if (board[newRow][activeCol].type === TILE_TYPES.ROCK) {
@@ -38,7 +65,8 @@ function Board(props) {
         });
         break;
       case "ArrowLeft":
-        setRotation(270);
+        arrowKeys();
+        setDir(3);
         setActiveCol((prevCol) => {
           let newCol = (prevCol - 1 + cols) % cols;
           if (board[activeRow][newCol].type === TILE_TYPES.ROCK) {
@@ -48,7 +76,8 @@ function Board(props) {
         });
         break;
       case "ArrowRight":
-        setRotation(90);
+        arrowKeys();
+        setDir(1);
         setActiveCol((prevCol) => {
           let newCol = (prevCol + 1) % cols;
           if (board[activeRow][newCol].type === TILE_TYPES.ROCK) {
@@ -68,23 +97,17 @@ function Board(props) {
     }
   };
 
-  let dir = useMemo(() => {
-    if (rotation === 90) return -1;
-    if (rotation === 270) return 1;
-    return -1;
-  }, [rotation]);
-
   return (
     <div tabIndex="0" onKeyDown={handleKeyDown}>
       <div className={styles.board}>
         <div
-          className={styles.mycharacter}
+          className={`${styles.mycharacter} ${styles[charDirection[dir]]}`}
           style={{
-            transform: `translate(${activeCol * 6}rem, ${
-              activeRow * 6
-            }rem) scaleX(${dir})`,
+            transform: `translate(${activeCol * 6}rem, ${activeRow * 6}rem)`,
+            backgroundPosition: `${vector * -44}px 0`,
           }}
         />
+
         {board.map((row, rowIndex) => {
           return (
             <div key={rowIndex} className={styles.row}>

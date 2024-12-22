@@ -4,10 +4,10 @@ import Board from "./components/board";
 
 function App() {
   return (
-    <>
-      <Board rows={10} cols={12} />
-      {/* <FreeWay rows={10} cols={10} /> */}
-    </>
+    // <>
+    <Board rows={10} cols={12} />
+    // {/* <FreeWay rows={10} cols={10} /> */}
+    // </>
   );
 }
 
