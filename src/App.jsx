@@ -1,13 +1,16 @@
+import { useState } from "react";
 import "./App.css";
 import Board from "./components/board";
 // import FreeWay from "./components/freeWay";
 
 function App() {
+  const [score, setScore] = useState(0);
   return (
-    // <>
-    <Board rows={10} cols={12} />
-    // {/* <FreeWay rows={10} cols={10} /> */}
-    // </>
+    <>
+      <div style={{ padding: "1rem", fontWeight: "bolder" }}>{score}</div>
+      <Board rows={9} cols={12} setScore={setScore} />
+      {/* <FreeWay rows={10} cols={10} /> */}
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Tile from "../tile";
 import styles from "./Board.module.css";
 import PropTypes from "prop-types";
@@ -8,8 +8,8 @@ import { generateRandomBoard } from "../../utils/helper";
 const charDirection = ["moveU", "moveR", "moveD", "moveL", "dragon"];
 
 function Board(props) {
-  const { rows, cols } = props;
-  const [board] = useState(() => {
+  const { rows, cols, setScore } = props;
+  const [board, setBoard] = useState(() => {
     return generateRandomBoard(rows, cols);
   });
   const [activeRow, setActiveRow] = useState(() => 0);
@@ -91,6 +91,17 @@ function Board(props) {
     }
   };
 
+  useEffect(() => {
+    if (board[activeRow][activeCol].type === TILE_TYPES.FOOD) {
+      setTimeout(() => {
+        let temp = board;
+        temp[activeRow][activeCol].type = TILE_TYPES.EMPTY;
+        setBoard(temp);
+        setScore((prevScore) => prevScore + 1);
+      }, 400);
+    }
+  }, [activeRow, activeCol]);
+
   return (
     <div tabIndex="0" onKeyDown={handleKeyDown}>
       <div className={styles.board}>
@@ -125,4 +136,5 @@ export default Board;
 Board.propTypes = {
   rows: PropTypes.number.isRequired,
   cols: PropTypes.number.isRequired,
+  setScore: PropTypes.func.isRequired,
 };
