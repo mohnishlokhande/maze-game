@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Tile from "../tile";
 import styles from "./Board.module.css";
 import PropTypes from "prop-types";
@@ -9,6 +9,7 @@ const charDirection = ["moveU", "moveR", "moveD", "moveL", "dragon"];
 
 function Board(props) {
   const { rows, cols, setScore } = props;
+  const boardRef = useRef(null);
   const [board, setBoard] = useState(() => {
     return generateRandomBoard(rows, cols);
   });
@@ -63,6 +64,7 @@ function Board(props) {
         setActiveCol((prevCol) => {
           let newCol = prevCol + 1;
           console.log("##right", prevCol, newCol);
+          // setVector(1);
           return setPosition(prevCol, newCol, 1);
         });
         break;
@@ -102,8 +104,14 @@ function Board(props) {
     }
   }, [activeRow, activeCol]);
 
+  useEffect(() => {
+    if (boardRef) {
+      boardRef?.current?.focus();
+    }
+  }, []);
+
   return (
-    <div tabIndex="0" onKeyDown={handleKeyDown}>
+    <div tabIndex="0" onKeyDown={handleKeyDown} ref={boardRef}>
       <div className={styles.board}>
         <div
           className={`${styles.mycharacter} ${
