@@ -12,19 +12,38 @@
   font-size: x-large;
 }
 .grass {
-  background-color: rgba(5, 86, 5, 0.87);
+  background: radial-gradient(
+    circle,
+    rgb(157 240 148 / 80%) 0%,
+    rgba(5, 86, 5, 0.87) 120%
+  );
   /* background: url(/public/grass.png) no-repeat center bottom / contain; */
 }
 .water {
-  background-color: rgba(0, 208, 255, 0.786);
+  background: radial-gradient(
+    circle,
+    rgb(169 223 251 / 80%) 0%,
+    rgba(0, 208, 255, 0.786) 120%
+  );
 }
 .rock {
-  background-color: rgba(72, 18, 18, 0.786);
+  background: radial-gradient(
+    circle,
+    rgba(120, 73, 73, 0.881) 0%,
+    rgba(72, 18, 18, 0.786) 120%
+  );
 }
 .empty {
-  background-color: rgba(5, 86, 5, 0.87);
-  /* background-color: rgba(255, 255, 255, 0.786); */
+  background: radial-gradient(
+    circle,
+    rgb(157 240 148 / 80%) 0%,
+    rgba(5, 86, 5, 0.87) 120%
+  );
 }
 .food {
-  background-color: rgba(5, 86, 5, 0.87);
+  background: radial-gradient(
+    circle,
+    rgb(157 240 148 / 80%) 0%,
+    rgba(5, 86, 5, 0.87) 120%
+  );
 }

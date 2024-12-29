@@ -7,7 +7,9 @@ function App() {
   const [score, setScore] = useState(0);
   return (
     <>
-      <div style={{ padding: "1rem", fontWeight: "bolder" }}>{score}</div>
+      <div style={{ padding: "1rem", fontWeight: "bolder" }}>
+        Score: {score}
+      </div>
       <Board rows={9} cols={12} setScore={setScore} />
       {/* <FreeWay rows={10} cols={10} /> */}
     </>
