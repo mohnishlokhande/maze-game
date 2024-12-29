@@ -3,36 +3,51 @@ import "./App.css";
 import Board from "./components/board";
 import { auth, database } from "./firebase-config";
 import { ref, onValue } from "firebase/database";
-import { writeData } from "./api/Api";
+import NewPlayer from "./components/newPlayer";
 
 function App() {
   const [score, setScore] = useState(0);
   const [data, setData] = useState(null);
+  const [newPlayer, setNewPlayer] = useState(true);
+  const [player, setPlayer] = useState({});
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      // Handle user state changes here
       console.log("##user", user);
       if (user) {
-        writeData(user.uid);
+        let temp = player;
+        temp.id = user.uid;
+        setPlayer(temp);
       } else {
-        // User is signed out
+        console.log("User signed out");
       }
     });
-
-    return unsubscribe; // Unsubscribe when component unmounts
+    return unsubscribe;
   }, [auth]);
+
+  const checkPlayer = (obj) => {
+    if (!obj) return;
+    const keys = Object.keys(obj);
+    console.log("##keys", keys, player, keys.includes(player.id));
+    if (keys.includes(player.id)) {
+      setNewPlayer(false);
+    }
+  };
 
   useEffect(() => {
     const dbRef = ref(database, "players");
     const unsubscribe = onValue(dbRef, (snapshot) => {
+      checkPlayer(snapshot.val());
       setData(snapshot.val());
     });
 
-    return () => unsubscribe(); // Cleanup listener on unmount
+    return () => unsubscribe();
   }, []);
 
-  console.log("##data", JSON.stringify(data), "|");
+  console.log("##data", player, data);
+  if (newPlayer) {
+    return <NewPlayer user={player} setNewPlayer={setNewPlayer} />;
+  }
 
   return (
     <>
@@ -48,7 +63,6 @@ function App() {
         <button onClick={() => {}}>Reset</button>
       </div>
       <Board rows={9} cols={12} setScore={setScore} />
-      {/* <FreeWay rows={10} cols={10} /> */}
     </>
   );
 }

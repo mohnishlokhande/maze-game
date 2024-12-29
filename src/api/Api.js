@@ -1,9 +1,9 @@
 import { ref, set, remove, update } from "firebase/database";
 import { database } from "../firebase-config";
 
-export const writeData = (id) => {
+export const writeData = (id, player) => {
   const dbRef = ref(database, `players/${id}`);
-  set(dbRef, { name: "John", age: 30 })
+  set(dbRef, player)
     .then(() => {
       console.log("Data written successfully!");
     })
