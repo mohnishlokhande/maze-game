@@ -1,0 +1,36 @@
+.mycharacter {
+  margin: 1.5rem;
+  width: 11rem;
+  height: 4rem;
+  position: absolute;
+  transition: transform 0.45s ease-out;
+  clip-path: inset(0px 132px 0px 0px);
+}
+
+.moveD {
+  background: url(/playerDown.png) no-repeat center center / contain;
+}
+.moveU {
+  background: url(/playerUp.png) no-repeat center center / contain;
+}
+.moveR {
+  background: url(/playerRight.png) no-repeat center center / contain;
+}
+.moveL {
+  background: url(/playerLeft.png) no-repeat center center / contain;
+}
+.dragon {
+  background: url(/draggleSprite.png) no-repeat center center / contain;
+}
+.walkLeft {
+  background: url(/walkLeft.gif) no-repeat center center / contain;
+}
+.walkRight {
+  background: url(/walkRight.gif) no-repeat center center / contain;
+}
+.name {
+  position: absolute;
+  min-width: 6rem;
+  text-align: center;
+  transition: transform 0.45s ease;
+}

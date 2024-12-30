@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import Tile from "../tile";
 import styles from "./Board.module.css";
 import PropTypes from "prop-types";
-import { TILE_TYPES, charDirection } from "../../utils/constants";
+import { TILE_TYPES } from "../../utils/constants";
 import { generateRandomBoard } from "../../utils/helper";
 import { updateData } from "../../api/Api";
+import Character from "../character";
 
 function Board(props) {
-  const { rows, cols, players = [], myPlayer } = props;
+  const { rows, cols, players = [], myPlayer, setPage } = props;
   const boardRef = useRef(null);
   const [score, setScore] = useState(0);
   const [board, setBoard] = useState(() => {
@@ -32,6 +33,13 @@ function Board(props) {
     setVector((prevIndex) => (prevIndex + 1) % 4);
 
     return newV;
+  };
+
+  const onEnter = () => {
+    if (board[activeRow][activeCol].type === TILE_TYPES.GAME) {
+      updateData(myPlayer?.id, { page: "home" });
+      setPage("home");
+    }
   };
 
   const handleKeyDown = (event) => {
@@ -69,6 +77,7 @@ function Board(props) {
       case " ":
         break;
       case "Enter":
+        onEnter();
         break;
       case "Escape":
         break;
@@ -86,7 +95,14 @@ function Board(props) {
         setScore((prevScore) => prevScore + 1);
       }, 400);
     }
-    updateData(myPlayer?.id, activeRow, activeCol, alignment, vector, score);
+    let updatedData = {
+      x: activeCol,
+      y: activeRow,
+      dir: alignment,
+      vector,
+      score,
+    };
+    updateData(myPlayer?.id, updatedData);
   }, [activeRow, activeCol]);
 
   useEffect(() => {
@@ -117,28 +133,7 @@ function Board(props) {
           }}
         /> */}
         {players?.map((p) => {
-          return (
-            <>
-              <div
-                className={`${styles.mycharacter} ${
-                  styles[charDirection[p?.dir]]
-                }`}
-                style={{
-                  transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
-                  backgroundPosition: `${p?.vector * -44}px 0`,
-                }}
-                key={p.id}
-              />
-              <div
-                className={styles.name}
-                style={{
-                  transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
-                }}
-              >
-                {p.name} {p.score}
-              </div>
-            </>
-          );
+          return <Character key={p.id} p={p} site="forest" />;
         })}
         {board.map((row, rowIndex) => {
           return (
@@ -165,4 +160,5 @@ Board.propTypes = {
   cols: PropTypes.number.isRequired,
   players: PropTypes.array,
   myPlayer: PropTypes.object,
+  setPage: PropTypes.func,
 };

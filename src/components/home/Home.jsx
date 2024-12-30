@@ -1,16 +1,17 @@
 // import { useEffect } from "react";
 import { homeBoard } from "../../utils/board";
-import { charDirection, TILE_TYPES } from "../../utils/constants";
+import { TILE_TYPES } from "../../utils/constants";
 import Tile from "../tile";
 import styles from "../board/Board.module.css";
 import styles2 from "./Home.module.css";
 import PropTypes from "prop-types";
 import { updateData } from "../../api/Api";
 import { useEffect, useRef, useState } from "react";
+import Character from "../character";
 
 export default function Home(props) {
   const { players = [], myPlayer, setPage } = props;
-  const { x, y, id, score, vector } = myPlayer;
+  const { x, y, id, vector } = myPlayer;
   const boardRef = useRef(null);
   const [hint, setHint] = useState("");
 
@@ -23,28 +24,38 @@ export default function Home(props) {
 
   const onEnter = () => {
     if (homeBoard[y][x] === TILE_TYPES.GAME) {
+      updateData(id, { page: "forest" });
       setPage("forest");
     }
   };
 
   const handleKeyDown = (event) => {
     console.log("##keydown", event.key);
+    let updatedData = {};
     switch (event.key) {
       case "ArrowUp":
         if (!checkValidMove(x, y - 1)) return;
-        updateData(id, y - 1, x, 0, (vector + 1) % 4, score);
+        updatedData = {
+          y: y - 1,
+          dir: 0,
+          vector: (vector + 1) % 4,
+        };
+        updateData(id, updatedData);
         break;
       case "ArrowRight":
         if (!checkValidMove(x + 1, y)) return;
-        updateData(id, y, x + 1, 1, (vector + 1) % 4, score);
+        updatedData = { x: x + 1, dir: 1, vector: (vector + 1) % 4 };
+        updateData(id, updatedData);
         break;
       case "ArrowDown":
         if (!checkValidMove(x, y + 1)) return;
-        updateData(id, y + 1, x, 2, (vector + 1) % 4, score);
+        updatedData = { y: y + 1, dir: 2, vector: (vector + 1) % 4 };
+        updateData(id, updatedData);
         break;
       case "ArrowLeft":
+        updatedData = { x: x - 1, dir: 3, vector: (vector + 1) % 4 };
         if (!checkValidMove(x - 1, y)) return;
-        updateData(id, y, x - 1, 3, (vector + 1) % 4, score);
+        updateData(id, updatedData);
         break;
       case " ":
         break;
@@ -83,27 +94,7 @@ export default function Home(props) {
       <div className={styles2.hint}>Hint: {hint}</div>
       <div>
         {players?.map((p) => {
-          return (
-            <div key={p.id}>
-              <div
-                className={`${styles.mycharacter} ${
-                  styles[charDirection[p?.dir]]
-                }`}
-                style={{
-                  transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
-                  backgroundPosition: `${p?.vector * -44}px 0`,
-                }}
-              />
-              <div
-                className={styles.name}
-                style={{
-                  transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
-                }}
-              >
-                {p.name}
-              </div>
-            </div>
-          );
+          return <Character key={p.id} p={p} site="home" />;
         })}
         {homeBoard.map((row, rowIndex) => {
           return (

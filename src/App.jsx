@@ -4,7 +4,7 @@ import Board from "./components/board";
 import { auth, database } from "./firebase-config";
 import { ref, onValue } from "firebase/database";
 import NewPlayer from "./components/newPlayer";
-import { deleteData } from "./api/Api";
+import { deleteData, updateData } from "./api/Api";
 import Home from "./components/home";
 
 function App() {
@@ -35,6 +35,7 @@ function App() {
   const backHome = () => {
     if (page === "home") return;
     setPage("home");
+    updateData(myPlayer?.id, { page: "home" });
   };
 
   useEffect(() => {
@@ -79,7 +80,13 @@ function App() {
         <Home myPlayer={myPlayer} players={players} setPage={setPage} />
       )}
       {page === "forest" && (
-        <Board rows={9} cols={12} myPlayer={myPlayer} players={players} />
+        <Board
+          rows={9}
+          cols={12}
+          myPlayer={myPlayer}
+          players={players}
+          setPage={setPage}
+        />
       )}
     </>
   );
