@@ -1,6 +1,6 @@
 // import { useEffect } from "react";
 import { homeBoard } from "../../utils/board";
-import { charDirection } from "../../utils/constants";
+import { charDirection, TILE_TYPES } from "../../utils/constants";
 import Tile from "../tile";
 import styles from "../board/Board.module.css";
 import styles2 from "./Home.module.css";
@@ -10,50 +10,34 @@ import { useEffect, useRef } from "react";
 
 export default function Home(props) {
   const { players = [], myPlayer } = props;
+  const { x, y, id, score, vector } = myPlayer;
   const boardRef = useRef(null);
+
+  const checkValidMove = (x, y) => {
+    if (x < 0 || x >= homeBoard[0].length || y < 0 || y >= homeBoard.length)
+      return true;
+    else if (homeBoard[y][x] === TILE_TYPES.WATER) return false;
+    else return true;
+  };
 
   const handleKeyDown = (event) => {
     console.log("##keydown", event.key);
     switch (event.key) {
       case "ArrowUp":
-        updateData(
-          myPlayer?.id,
-          myPlayer?.y - 1,
-          myPlayer?.x,
-          0,
-          (myPlayer?.vector + 1) % 4,
-          myPlayer?.score
-        );
+        if (!checkValidMove(x, y - 1)) return;
+        updateData(id, y - 1, x, 0, (vector + 1) % 4, score);
         break;
       case "ArrowRight":
-        updateData(
-          myPlayer?.id,
-          myPlayer?.y,
-          myPlayer?.x + 1,
-          1,
-          (myPlayer?.vector + 1) % 4,
-          myPlayer?.score
-        );
+        if (!checkValidMove(x + 1, y)) return;
+        updateData(id, y, x + 1, 1, (vector + 1) % 4, score);
         break;
       case "ArrowDown":
-        updateData(
-          myPlayer?.id,
-          myPlayer?.y + 1,
-          myPlayer?.x,
-          2,
-          (myPlayer?.vector + 1) % 4,
-          myPlayer?.score
-        );
+        if (!checkValidMove(x, y + 1)) return;
+        updateData(id, y + 1, x, 2, (vector + 1) % 4, score);
         break;
       case "ArrowLeft":
-        updateData(
-          myPlayer?.id,
-          myPlayer?.y,
-          myPlayer?.x - 1,
-          3,
-          (myPlayer?.vector + 1) % 4,
-          myPlayer?.score
-        );
+        if (!checkValidMove(x - 1, y)) return;
+        updateData(id, y, x - 1, 3, (vector + 1) % 4, score);
         break;
       case " ":
         break;
@@ -99,7 +83,7 @@ export default function Home(props) {
                   transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
                 }}
               >
-                {p.name} {p.score}
+                {p.name}
               </div>
             </div>
           );
