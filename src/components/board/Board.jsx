@@ -9,7 +9,7 @@ import { updateData } from "../../api/Api";
 const charDirection = ["moveU", "moveR", "moveD", "moveL", "dragon"];
 
 function Board(props) {
-  const { rows, cols, setScore, players = [], myPlayer } = props;
+  const { rows, cols, setScore, players = [], myPlayer, score } = props;
   const boardRef = useRef(null);
   const [board, setBoard] = useState(() => {
     return generateRandomBoard(rows, cols);
@@ -18,25 +18,8 @@ function Board(props) {
   const [activeCol, setActiveCol] = useState(() => 0);
   const [alignment, setAlignment] = useState(() => 2);
   const [vector, setVector] = useState(() => 0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  const handleMovement = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    console.log("##handleMovement", alignment, vector, activeRow, activeCol);
-    const interval = setInterval(() => {
-      setVector((prevIndex) => (prevIndex + 1) % 4);
-    }, 200);
-
-    setTimeout(() => {
-      clearInterval(interval);
-      setVector(0);
-      setIsTransitioning(false);
-    }, 800);
-  };
 
   const setPosition = (prev, newV, dir) => {
-    console.log("##P", dir, prev, "=>", newV);
     const isRow = dir === 0 || dir === 2;
     const limit = isRow ? rows : cols;
     if (newV < 0 || newV >= limit) return prev;
@@ -47,7 +30,8 @@ function Board(props) {
     if (type === TILE_TYPES.ROCK) return prev;
     else if (type === TILE_TYPES.WATER) setAlignment(4);
     else setAlignment(dir);
-    handleMovement();
+    setVector((prevIndex) => (prevIndex + 1) % 4);
+
     return newV;
   };
 
@@ -103,16 +87,17 @@ function Board(props) {
         setScore((prevScore) => prevScore + 1);
       }, 400);
     }
-    updateData(myPlayer?.id, activeRow, activeCol);
+    updateData(myPlayer?.id, activeRow, activeCol, alignment, vector, score);
   }, [activeRow, activeCol]);
 
   useEffect(() => {
     if (boardRef) {
       boardRef?.current?.focus();
+      setActiveRow(myPlayer?.y);
+      setActiveCol(myPlayer?.x);
+      setScore(myPlayer?.score);
     }
   }, []);
-
-  console.log("##players", myPlayer, "|", players);
 
   return (
     <div tabIndex="0" onKeyDown={handleKeyDown} ref={boardRef}>
@@ -128,13 +113,26 @@ function Board(props) {
         />
         {players?.map((p) => {
           return (
-            <div
-              className={` ${styles.char} ${styles.walkRight}`}
-              style={{
-                transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
-              }}
-              key={p.id}
-            />
+            <>
+              <div
+                className={`${styles.mycharacter} ${
+                  styles[charDirection[p?.dir]]
+                }`}
+                style={{
+                  transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
+                  backgroundPosition: `${p?.vector * -44}px 0`,
+                }}
+                key={p.id}
+              />
+              <div
+                className={styles.name}
+                style={{
+                  transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
+                }}
+              >
+                {p.name} {p.score}
+              </div>
+            </>
           );
         })}
         {board.map((row, rowIndex) => {
@@ -158,6 +156,7 @@ export default Board;
 Board.propTypes = {
   rows: PropTypes.number.isRequired,
   cols: PropTypes.number.isRequired,
+  score: PropTypes.number.isRequired,
   setScore: PropTypes.func.isRequired,
   players: PropTypes.array,
   myPlayer: PropTypes.object,

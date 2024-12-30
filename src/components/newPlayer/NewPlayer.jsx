@@ -10,7 +10,15 @@ function NewPlayer(props) {
 
   const registerPlayer = () => {
     setNewPlayer(false);
-    const player = { name: name, score: 0, x: 0, y: 0, character: "" };
+    const player = {
+      name: name,
+      score: 0,
+      x: 0,
+      y: 0,
+      character: "",
+      dir: 2,
+      vector: 0,
+    };
     writeData(user?.id, player);
     // setupDisconnectHandler(user.uid);
   };

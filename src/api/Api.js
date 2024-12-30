@@ -12,10 +12,9 @@ export const writeData = (id, player) => {
     });
 };
 
-export const updateData = (id, row, col) => {
-  console.log("##updateData", id, row, col);
+export const updateData = (id, row, col, dir, vector, score) => {
   const dbRef = ref(database, `players/${id}`);
-  update(dbRef, { x: col, y: row })
+  update(dbRef, { x: col, y: row, dir: dir, vector, score })
     .then(() => {
       console.log("Data updated successfully!");
     })

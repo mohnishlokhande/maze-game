@@ -73,6 +73,7 @@ function App() {
       <Board
         rows={9}
         cols={12}
+        score={score}
         setScore={setScore}
         myPlayer={myPlayer}
         players={players}
