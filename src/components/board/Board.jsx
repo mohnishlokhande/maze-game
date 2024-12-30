@@ -2,15 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import Tile from "../tile";
 import styles from "./Board.module.css";
 import PropTypes from "prop-types";
-import { TILE_TYPES } from "../../utils/constants";
+import { TILE_TYPES, charDirection } from "../../utils/constants";
 import { generateRandomBoard } from "../../utils/helper";
 import { updateData } from "../../api/Api";
 
-const charDirection = ["moveU", "moveR", "moveD", "moveL", "dragon"];
-
 function Board(props) {
-  const { rows, cols, setScore, players = [], myPlayer, score } = props;
+  const { rows, cols, players = [], myPlayer } = props;
   const boardRef = useRef(null);
+  const [score, setScore] = useState(0);
   const [board, setBoard] = useState(() => {
     return generateRandomBoard(rows, cols);
   });
@@ -93,16 +92,17 @@ function Board(props) {
   useEffect(() => {
     if (boardRef) {
       boardRef?.current?.focus();
-      setActiveRow(myPlayer?.y);
-      setActiveCol(myPlayer?.x);
-      setScore(myPlayer?.score);
+      setActiveRow(myPlayer?.y || 0);
+      setActiveCol(myPlayer?.x || 0);
+      setScore(myPlayer?.score || 0);
     }
   }, []);
 
   return (
     <div tabIndex="0" onKeyDown={handleKeyDown} ref={boardRef}>
+      <div> Score: {score}</div>
       <div className={styles.board}>
-        <div
+        {/* <div
           className={`${styles.mycharacter} ${
             styles[charDirection[alignment]]
           }`}
@@ -110,7 +110,7 @@ function Board(props) {
             transform: `translate(${activeCol * 6}rem, ${activeRow * 6}rem)`,
             backgroundPosition: `${vector * -44}px 0`,
           }}
-        />
+        /> */}
         {players?.map((p) => {
           return (
             <>
@@ -141,7 +141,9 @@ function Board(props) {
               {row.map((col, colIndex) => {
                 const isActive =
                   activeRow === rowIndex && activeCol === colIndex;
-                return <Tile key={colIndex} isActive={isActive} tile={col} />;
+                return (
+                  <Tile key={colIndex} isActive={isActive} type={col?.type} />
+                );
               })}
             </div>
           );
@@ -156,8 +158,6 @@ export default Board;
 Board.propTypes = {
   rows: PropTypes.number.isRequired,
   cols: PropTypes.number.isRequired,
-  score: PropTypes.number.isRequired,
-  setScore: PropTypes.func.isRequired,
   players: PropTypes.array,
   myPlayer: PropTypes.object,
 };

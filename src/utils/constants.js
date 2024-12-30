@@ -4,6 +4,7 @@ export const TILE_TYPES = {
   ROCK: "rock",
   EMPTY: "empty",
   FOOD: "food",
+  null: "null",
 };
 
 export const TILE_DENSITIES = {
@@ -13,3 +14,5 @@ export const TILE_DENSITIES = {
   [TILE_TYPES.ROCK]: 0.15, // 15%
   [TILE_TYPES.FOOD]: 0.15, // 5%
 };
+
+export const charDirection = ["moveU", "moveR", "moveD", "moveL", "dragon"];

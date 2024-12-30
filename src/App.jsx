@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import Board from "./components/board";
+// import Board from "./components/board";
 import { auth, database } from "./firebase-config";
 import { ref, onValue } from "firebase/database";
 import NewPlayer from "./components/newPlayer";
 import { deleteData } from "./api/Api";
+import Home from "./components/home";
 
 function App() {
-  const [score, setScore] = useState(0);
   const [newPlayer, setNewPlayer] = useState(true);
   const [myPlayer, setMyPlayer] = useState({});
   const [players, setPlayers] = useState([]);
@@ -19,9 +19,8 @@ function App() {
       if (key === myPlayer.id) {
         setMyPlayer({ id: key, ...obj[key] });
         setNewPlayer(false);
-      } else {
-        list.push({ id: key, ...obj[key] });
       }
+      list.push({ id: key, ...obj[key] });
     }
     setPlayers(list);
   };
@@ -67,17 +66,10 @@ function App() {
           justifyContent: "space-between",
         }}
       >
-        <div> Score: {score}</div>
         <button onClick={onReset}>Reset</button>
       </div>
-      <Board
-        rows={9}
-        cols={12}
-        score={score}
-        setScore={setScore}
-        myPlayer={myPlayer}
-        players={players}
-      />
+      <Home myPlayer={myPlayer} players={players} />
+      {/* <Board rows={9} cols={12} myPlayer={myPlayer} players={players} /> */}
     </>
   );
 }
