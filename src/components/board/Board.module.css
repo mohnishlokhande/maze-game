@@ -34,3 +34,15 @@
 .dragon {
   background: url(/draggleSprite.png) no-repeat center center / contain;
 }
+.walkLeft {
+  background: url(/walkLeft.gif) no-repeat center center / contain;
+}
+.walkRight {
+  background: url(/walkRight.gif) no-repeat center center / contain;
+}
+.char {
+  margin: 0.5rem;
+  width: 5rem;
+  height: 5rem;
+  position: absolute;
+}

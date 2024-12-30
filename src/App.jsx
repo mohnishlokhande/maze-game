@@ -8,28 +8,36 @@ import { deleteData } from "./api/Api";
 
 function App() {
   const [score, setScore] = useState(0);
-  const [users, setUsers] = useState(null);
   const [newPlayer, setNewPlayer] = useState(true);
-  const [player, setPlayer] = useState({});
+  const [myPlayer, setMyPlayer] = useState({});
+  const [players, setPlayers] = useState([]);
 
   const checkPlayer = (obj) => {
     if (!obj) return;
+    let list = [];
     for (const key in obj) {
-      console.log(`${key}: ${obj[key]}`);
-      if (key === player.id) {
-        setPlayer({ ...player, ...obj[key] });
+      if (key === myPlayer.id) {
+        setMyPlayer({ id: key, ...obj[key] });
         setNewPlayer(false);
+      } else {
+        list.push({ id: key, ...obj[key] });
       }
     }
+    setPlayers(list);
+  };
+
+  const onReset = () => {
+    deleteData(myPlayer?.id);
+    setNewPlayer(true);
+    setMyPlayer({});
   };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      console.log("##user", user);
       if (user) {
-        let temp = player;
+        let temp = myPlayer;
         temp.id = user.uid;
-        setPlayer(temp);
+        setMyPlayer(temp);
       } else {
         console.log("User signed out");
       }
@@ -41,14 +49,12 @@ function App() {
     const dbRef = ref(database, "players");
     const unsubscribe = onValue(dbRef, (snapshot) => {
       checkPlayer(snapshot.val());
-      setUsers(snapshot.val());
     });
     return () => unsubscribe();
   }, []);
 
-  console.log("##users", player, users);
   if (newPlayer) {
-    return <NewPlayer user={player} setNewPlayer={setNewPlayer} />;
+    return <NewPlayer user={myPlayer} setNewPlayer={setNewPlayer} />;
   }
 
   return (
@@ -62,20 +68,14 @@ function App() {
         }}
       >
         <div> Score: {score}</div>
-        <button
-          onClick={() => {
-            deleteData(player?.id);
-          }}
-        >
-          Reset
-        </button>
+        <button onClick={onReset}>Reset</button>
       </div>
       <Board
         rows={9}
         cols={12}
         setScore={setScore}
-        players={users}
-        player={player}
+        myPlayer={myPlayer}
+        players={players}
       />
     </>
   );

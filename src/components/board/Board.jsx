@@ -9,7 +9,7 @@ import { updateData } from "../../api/Api";
 const charDirection = ["moveU", "moveR", "moveD", "moveL", "dragon"];
 
 function Board(props) {
-  const { rows, cols, setScore, players = {}, player } = props;
+  const { rows, cols, setScore, players = [], myPlayer } = props;
   const boardRef = useRef(null);
   const [board, setBoard] = useState(() => {
     return generateRandomBoard(rows, cols);
@@ -103,7 +103,7 @@ function Board(props) {
         setScore((prevScore) => prevScore + 1);
       }, 400);
     }
-    updateData(player?.id, activeRow, activeCol);
+    updateData(myPlayer?.id, activeRow, activeCol);
   }, [activeRow, activeCol]);
 
   useEffect(() => {
@@ -111,6 +111,8 @@ function Board(props) {
       boardRef?.current?.focus();
     }
   }, []);
+
+  console.log("##players", myPlayer, "|", players);
 
   return (
     <div tabIndex="0" onKeyDown={handleKeyDown} ref={boardRef}>
@@ -124,7 +126,17 @@ function Board(props) {
             backgroundPosition: `${vector * -44}px 0`,
           }}
         />
-
+        {players?.map((p) => {
+          return (
+            <div
+              className={` ${styles.char} ${styles.walkRight}`}
+              style={{
+                transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
+              }}
+              key={p.id}
+            />
+          );
+        })}
         {board.map((row, rowIndex) => {
           return (
             <div key={rowIndex} className={styles.row}>
@@ -147,6 +159,6 @@ Board.propTypes = {
   rows: PropTypes.number.isRequired,
   cols: PropTypes.number.isRequired,
   setScore: PropTypes.func.isRequired,
-  players: PropTypes.object,
-  player: PropTypes.object,
+  players: PropTypes.array,
+  myPlayer: PropTypes.object,
 };
