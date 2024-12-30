@@ -53,3 +53,7 @@
 .walkRight {
   background: url(/walkRight.gif) no-repeat center center / contain;
 }
+
+.boardContainer:focus-visible {
+  outline: none !important;
+}

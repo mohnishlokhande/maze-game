@@ -99,7 +99,12 @@ function Board(props) {
   }, []);
 
   return (
-    <div tabIndex="0" onKeyDown={handleKeyDown} ref={boardRef}>
+    <div
+      tabIndex="0"
+      onKeyDown={handleKeyDown}
+      ref={boardRef}
+      className={styles.boardContainer}
+    >
       <div> Score: {score}</div>
       <div className={styles.board}>
         {/* <div

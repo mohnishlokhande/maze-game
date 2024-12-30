@@ -5,6 +5,9 @@
   align-items: center;
   height: 90vh;
 }
+.home:focus-visible {
+  outline: none !important;
+}
 .hint {
   width: 100%;
   display: flex;
