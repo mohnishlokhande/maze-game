@@ -6,18 +6,25 @@ import styles from "../board/Board.module.css";
 import styles2 from "./Home.module.css";
 import PropTypes from "prop-types";
 import { updateData } from "../../api/Api";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home(props) {
-  const { players = [], myPlayer } = props;
+  const { players = [], myPlayer, setPage } = props;
   const { x, y, id, score, vector } = myPlayer;
   const boardRef = useRef(null);
+  const [hint, setHint] = useState("");
 
   const checkValidMove = (x, y) => {
     if (x < 0 || x >= homeBoard[0].length || y < 0 || y >= homeBoard.length)
       return true;
     else if (homeBoard[y][x] === TILE_TYPES.WATER) return false;
     else return true;
+  };
+
+  const onEnter = () => {
+    if (homeBoard[y][x] === TILE_TYPES.GAME) {
+      setPage("forest");
+    }
   };
 
   const handleKeyDown = (event) => {
@@ -42,6 +49,7 @@ export default function Home(props) {
       case " ":
         break;
       case "Enter":
+        onEnter();
         break;
       case "Escape":
         break;
@@ -49,6 +57,14 @@ export default function Home(props) {
         break;
     }
   };
+
+  useEffect(() => {
+    if (x === 0 && y === 4) {
+      setHint("Press enter");
+    } else {
+      setHint("");
+    }
+  }, [x, y]);
 
   useEffect(() => {
     if (boardRef) {
@@ -64,6 +80,7 @@ export default function Home(props) {
       ref={boardRef}
     >
       Living area
+      <div className={styles2.hint}>Hint: {hint}</div>
       <div>
         {players?.map((p) => {
           return (
@@ -105,4 +122,5 @@ export default function Home(props) {
 Home.propTypes = {
   players: PropTypes.array,
   myPlayer: PropTypes.object,
+  setPage: PropTypes.func,
 };

@@ -56,7 +56,7 @@ export const homeBoard = [
     "empty",
   ],
   [
-    "empty",
+    "game",
     "empty",
     "empty",
     "empty",

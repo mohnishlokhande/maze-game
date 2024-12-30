@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-// import Board from "./components/board";
+import Board from "./components/board";
 import { auth, database } from "./firebase-config";
 import { ref, onValue } from "firebase/database";
 import NewPlayer from "./components/newPlayer";
@@ -11,6 +11,7 @@ function App() {
   const [newPlayer, setNewPlayer] = useState(true);
   const [myPlayer, setMyPlayer] = useState({});
   const [players, setPlayers] = useState([]);
+  const [page, setPage] = useState("home");
 
   const checkPlayer = (obj) => {
     if (!obj) return;
@@ -29,6 +30,11 @@ function App() {
     deleteData(myPlayer?.id);
     setNewPlayer(true);
     setMyPlayer({});
+  };
+
+  const backHome = () => {
+    if (page === "home") return;
+    setPage("home");
   };
 
   useEffect(() => {
@@ -66,10 +72,15 @@ function App() {
           justifyContent: "space-between",
         }}
       >
+        <button onClick={backHome}>Home</button>
         <button onClick={onReset}>Reset</button>
       </div>
-      <Home myPlayer={myPlayer} players={players} />
-      {/* <Board rows={9} cols={12} myPlayer={myPlayer} players={players} /> */}
+      {page === "home" && (
+        <Home myPlayer={myPlayer} players={players} setPage={setPage} />
+      )}
+      {page === "forest" && (
+        <Board rows={9} cols={12} myPlayer={myPlayer} players={players} />
+      )}
     </>
   );
 }

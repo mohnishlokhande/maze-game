@@ -12,6 +12,7 @@ function Tile(props) {
     [TILE_TYPES.ROCK]: "⛰️",
     [TILE_TYPES.EMPTY]: "",
     [TILE_TYPES.FOOD]: "🍎",
+    [TILE_TYPES.GAME]: "🌳",
   };
 
   return (

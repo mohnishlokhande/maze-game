@@ -4,7 +4,8 @@ export const TILE_TYPES = {
   ROCK: "rock",
   EMPTY: "empty",
   FOOD: "food",
-  null: "null",
+  NULL: "null",
+  GAME: "game",
 };
 
 export const TILE_DENSITIES = {
