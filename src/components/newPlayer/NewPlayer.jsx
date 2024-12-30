@@ -12,13 +12,12 @@ function NewPlayer(props) {
     setNewPlayer(false);
     const player = { name: name, score: 0, x: 0, y: 0, character: "" };
     writeData(user?.id, player);
+    // setupDisconnectHandler(user.uid);
   };
 
   const handleChange = (event) => {
-    console.log("##", event.target.value);
     setSelectedChar(event.target.value);
   };
-  console.log("##", selectedChar);
 
   return (
     <div className={styles.newPlayer}>

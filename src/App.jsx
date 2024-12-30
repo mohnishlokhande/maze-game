@@ -4,12 +4,24 @@ import Board from "./components/board";
 import { auth, database } from "./firebase-config";
 import { ref, onValue } from "firebase/database";
 import NewPlayer from "./components/newPlayer";
+import { deleteData } from "./api/Api";
 
 function App() {
   const [score, setScore] = useState(0);
-  const [data, setData] = useState(null);
+  const [users, setUsers] = useState(null);
   const [newPlayer, setNewPlayer] = useState(true);
   const [player, setPlayer] = useState({});
+
+  const checkPlayer = (obj) => {
+    if (!obj) return;
+    for (const key in obj) {
+      console.log(`${key}: ${obj[key]}`);
+      if (key === player.id) {
+        setPlayer({ ...player, ...obj[key] });
+        setNewPlayer(false);
+      }
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -25,26 +37,16 @@ function App() {
     return unsubscribe;
   }, [auth]);
 
-  const checkPlayer = (obj) => {
-    if (!obj) return;
-    const keys = Object.keys(obj);
-    console.log("##keys", keys, player, keys.includes(player.id));
-    if (keys.includes(player.id)) {
-      setNewPlayer(false);
-    }
-  };
-
   useEffect(() => {
     const dbRef = ref(database, "players");
     const unsubscribe = onValue(dbRef, (snapshot) => {
       checkPlayer(snapshot.val());
-      setData(snapshot.val());
+      setUsers(snapshot.val());
     });
-
     return () => unsubscribe();
   }, []);
 
-  console.log("##data", player, data);
+  console.log("##users", player, users);
   if (newPlayer) {
     return <NewPlayer user={player} setNewPlayer={setNewPlayer} />;
   }
@@ -60,9 +62,21 @@ function App() {
         }}
       >
         <div> Score: {score}</div>
-        <button onClick={() => {}}>Reset</button>
+        <button
+          onClick={() => {
+            deleteData(player?.id);
+          }}
+        >
+          Reset
+        </button>
       </div>
-      <Board rows={9} cols={12} setScore={setScore} />
+      <Board
+        rows={9}
+        cols={12}
+        setScore={setScore}
+        players={users}
+        player={player}
+      />
     </>
   );
 }

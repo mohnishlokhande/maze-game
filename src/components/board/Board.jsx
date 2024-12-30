@@ -4,11 +4,12 @@ import styles from "./Board.module.css";
 import PropTypes from "prop-types";
 import { TILE_TYPES } from "../../utils/constants";
 import { generateRandomBoard } from "../../utils/helper";
+import { updateData } from "../../api/Api";
 
 const charDirection = ["moveU", "moveR", "moveD", "moveL", "dragon"];
 
 function Board(props) {
-  const { rows, cols, setScore } = props;
+  const { rows, cols, setScore, players = {}, player } = props;
   const boardRef = useRef(null);
   const [board, setBoard] = useState(() => {
     return generateRandomBoard(rows, cols);
@@ -102,6 +103,7 @@ function Board(props) {
         setScore((prevScore) => prevScore + 1);
       }, 400);
     }
+    updateData(player?.id, activeRow, activeCol);
   }, [activeRow, activeCol]);
 
   useEffect(() => {
@@ -145,4 +147,6 @@ Board.propTypes = {
   rows: PropTypes.number.isRequired,
   cols: PropTypes.number.isRequired,
   setScore: PropTypes.func.isRequired,
+  players: PropTypes.object,
+  player: PropTypes.object,
 };
