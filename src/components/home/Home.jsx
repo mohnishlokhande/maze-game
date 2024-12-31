@@ -28,10 +28,15 @@ export default function Home(props) {
   };
 
   const onEnter = () => {
-    console.log("##onEnter", x, y, homeBoard[y][x]);
+    if (checkValidMove(x, y) === 2) return;
     if (homeBoard[y][x] === TILE_TYPES.GAME) {
       updateData(id, { page: "forest" });
       setPage("forest");
+    } else if (homeBoard[y][x] === TILE_TYPES.FREE_WAY) {
+      updateData(id, { page: "freeway" });
+      setPage("freeway");
+    } else if (homeBoard[y][x] === TILE_TYPES.SELL_APPLE) {
+      updateData(id, { score: 0 });
     } else if (checkValidMove(x, y) === 1) {
       boardRef?.current?.blur();
       setIsTyping(true);

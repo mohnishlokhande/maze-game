@@ -13,6 +13,8 @@ function Tile(props) {
     [TILE_TYPES.EMPTY]: "",
     [TILE_TYPES.FOOD]: "🍎",
     [TILE_TYPES.GAME]: "🌳",
+    [TILE_TYPES.SELL_APPLE]: "💰",
+    [TILE_TYPES.FREE_WAY]: "🚦",
   };
 
   return (

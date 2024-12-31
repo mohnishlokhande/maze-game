@@ -3,9 +3,10 @@ import Tile from "../tile";
 import styles from "../board/Board.module.css";
 import PropTypes from "prop-types";
 import { TILE_TYPES } from "../../utils/constants";
+import Character from "../character";
 
 function FreeWay(props) {
-  const { rows, cols } = props;
+  const { rows, cols, myPlayer, players } = props;
   const [board] = useState(() => {
     let grid = [];
     for (let i = 0; i < rows; i++) {
@@ -131,17 +132,22 @@ function FreeWay(props) {
   //     return -1;
   //   }, [rotation]);
 
+  console.log("position", players);
+
   return (
     <div tabIndex="0" onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
       <div className={styles.board}>
-        <div
+        {/* <div
           className={styles.mycharacter}
           style={{
             transform: `translate(${position.col * 6}rem, ${
               position.row * 6
             }rem)`,
           }}
-        />
+        /> */}
+        {players?.map((p) => {
+          return <Character key={p.id} p={p} site="freeway" />;
+        })}
         {board.map((row, rowIndex) => {
           return (
             <div key={rowIndex} className={styles.row}>
@@ -163,4 +169,6 @@ export default FreeWay;
 FreeWay.propTypes = {
   rows: PropTypes.number.isRequired,
   cols: PropTypes.number.isRequired,
+  players: PropTypes.array,
+  myPlayer: PropTypes.object,
 };

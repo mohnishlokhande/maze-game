@@ -9,6 +9,7 @@ function NewPlayer(props) {
   const [selectedChar, setSelectedChar] = useState("male");
 
   const registerPlayer = () => {
+    if (name.trim().length === 0) return;
     setNewPlayer(false);
     const player = {
       name: name,

@@ -6,6 +6,9 @@ export const TILE_TYPES = {
   FOOD: "food",
   NULL: "null",
   GAME: "game",
+  WOOD: "wood",
+  SELL_APPLE: "sellApple",
+  FREE_WAY: "freeway",
 };
 
 export const TILE_DENSITIES = {

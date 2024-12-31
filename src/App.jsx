@@ -6,6 +6,7 @@ import { ref, onValue } from "firebase/database";
 import NewPlayer from "./components/newPlayer";
 import { deleteData, updateData } from "./api/Api";
 import Home from "./components/home";
+import FreeWay from "./components/freeWay/FreeWay";
 
 function App() {
   const [newPlayer, setNewPlayer] = useState(true);
@@ -86,6 +87,15 @@ function App() {
           myPlayer={myPlayer}
           players={players}
           setPage={setPage}
+        />
+      )}
+      {page === "freeWay" && (
+        <FreeWay
+          rows={10}
+          cols={10}
+          myPlayer={myPlayer}
+          players={players}
+          // setPage={setPage}
         />
       )}
     </>
