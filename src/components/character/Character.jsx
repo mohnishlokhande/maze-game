@@ -11,14 +11,14 @@ export default function Character(props) {
       <div
         className={`${styles.mycharacter} ${styles[charDirection[p?.dir]]}`}
         style={{
-          transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
-          backgroundPosition: `${p?.vector * -44}px 0`,
+          transform: `translate(${p?.x * 4}rem, ${p?.y * 4}rem)`,
+          backgroundPosition: `${p?.vector * -24}px 0`,
         }}
       />
       <div
         className={styles.name}
         style={{
-          transform: `translate(${p?.x * 6}rem, ${p?.y * 6}rem)`,
+          transform: `translate(${p?.x * 4}rem, ${p?.y * 4}rem)`,
         }}
       >
         {p.name} {site === "forest" && p.score}

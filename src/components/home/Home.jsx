@@ -14,18 +14,23 @@ export default function Home(props) {
   const { x, y, id, vector } = myPlayer;
   const boardRef = useRef(null);
   const [hint, setHint] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [msg, setMsg] = useState("");
 
   const checkValidMove = (x, y) => {
     if (x < 0 || x >= homeBoard[0].length || y < 0 || y >= homeBoard.length)
-      return true;
-    else if (homeBoard[y][x] === TILE_TYPES.WATER) return false;
-    else return true;
+      return 2;
+    else if (homeBoard[y][x] === TILE_TYPES.WATER) return 0;
+    else return 1;
   };
 
   const onEnter = () => {
     if (homeBoard[y][x] === TILE_TYPES.GAME) {
       updateData(id, { page: "forest" });
       setPage("forest");
+    } else if (checkValidMove(x, y) === 1) {
+      setIsTyping(true);
+      updateData(id, { isTyping: true });
     }
   };
 
@@ -106,6 +111,18 @@ export default function Home(props) {
           );
         })}
       </div>
+      {isTyping && (
+        <div className={styles2.editor}>
+          <input
+            type="text"
+            className={styles2.input}
+            value={msg}
+            onChange={(e) => {
+              setMsg(e.target.value);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

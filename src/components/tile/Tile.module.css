@@ -3,8 +3,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
   /* border: 1px solid #e0e0e0; */
   /* background-color: #f5f5f5; */
   /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
@@ -47,7 +47,7 @@
     rgba(5, 86, 5, 0.87) 120%
   );
 }
-.game{
+.game {
   background: radial-gradient(
     circle,
     rgba(125, 153, 236, 0.8) 0%,
