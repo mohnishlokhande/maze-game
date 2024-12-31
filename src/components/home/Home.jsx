@@ -33,13 +33,14 @@ export default function Home(props) {
       updateData(id, { page: "forest" });
       setPage("forest");
     } else if (checkValidMove(x, y) === 1) {
+      boardRef?.current?.blur();
       setIsTyping(true);
       updateData(id, { isTyping: true });
-      boardRef?.current?.blur();
     }
   };
 
   const handleKeyDown = (event) => {
+    event.preventDefault();
     let updatedData = {};
     switch (event.key) {
       case "ArrowUp":
@@ -97,27 +98,29 @@ export default function Home(props) {
   }, []);
 
   return (
-    <div
-      className={styles2.home}
-      tabIndex="0"
-      onKeyDown={handleKeyDown}
-      ref={boardRef}
-    >
-      Living area
-      <div className={styles2.hint}>Hint: {hint}</div>
-      <div>
-        {players?.map((p) => {
-          return <Character key={p.id} p={p} site="home" />;
-        })}
-        {homeBoard.map((row, rowIndex) => {
-          return (
-            <div key={rowIndex} className={styles.row}>
-              {row.map((col, colIndex) => {
-                return <Tile key={colIndex} type={col} />;
-              })}
-            </div>
-          );
-        })}
+    <>
+      <div
+        className={styles2.home}
+        tabIndex="0"
+        onKeyDown={handleKeyDown}
+        ref={boardRef}
+      >
+        Living area
+        <div className={styles2.hint}>Hint: {hint}</div>
+        <div>
+          {players?.map((p) => {
+            return <Character key={p.id} p={p} site="home" />;
+          })}
+          {homeBoard.map((row, rowIndex) => {
+            return (
+              <div key={rowIndex} className={styles.row}>
+                {row.map((col, colIndex) => {
+                  return <Tile key={colIndex} type={col} />;
+                })}
+              </div>
+            );
+          })}
+        </div>
       </div>
       <Editor
         id={id}
@@ -127,7 +130,7 @@ export default function Home(props) {
         setIsTyping={setIsTyping}
         setMsg={setMsg}
       />
-    </div>
+    </>
   );
 }
 
