@@ -36,7 +36,7 @@
 }
 .msgContainer {
   position: absolute;
-  background: url(/public/msg/sideMsg.png) no-repeat center center / contain;
+  background: url(/msg/sideMsg.png) no-repeat center center / contain;
   height: 4rem;
   width: 8rem;
   top: 0.3rem;

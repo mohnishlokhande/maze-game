@@ -8,9 +8,9 @@ import PropTypes from "prop-types";
 import { updateData } from "../../api/Api";
 import { useEffect, useRef, useState } from "react";
 import Character from "../character";
+import Editor from "../editor";
 
 export default function Home(props) {
-  const textareaRef = useRef(null);
   const { players = [], myPlayer, setPage } = props;
   const { x, y, id, vector } = myPlayer;
   const boardRef = useRef(null);
@@ -19,7 +19,6 @@ export default function Home(props) {
   );
   const [isTyping, setIsTyping] = useState(false);
   const [msg, setMsg] = useState("");
-  const [rows, setRows] = useState(2);
 
   const checkValidMove = (x, y) => {
     if (x < 0 || x >= homeBoard[0].length || y < 0 || y >= homeBoard.length)
@@ -29,37 +28,18 @@ export default function Home(props) {
   };
 
   const onEnter = () => {
+    console.log("##onEnter", x, y, homeBoard[y][x]);
     if (homeBoard[y][x] === TILE_TYPES.GAME) {
       updateData(id, { page: "forest" });
       setPage("forest");
     } else if (checkValidMove(x, y) === 1) {
       setIsTyping(true);
       updateData(id, { isTyping: true });
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    console.log("##keypress", e.key);
-    if (e.key === "Enter" && !e.shiftKey && msg) {
-      e.preventDefault();
-      updateData(id, { isTyping: false, msg: msg });
-      setIsTyping(false);
-      setMsg("");
-      setRows(2);
-      boardRef?.current?.focus();
-    } else if (e.key === "Enter" && e.shiftKey && rows < 16) {
-      setRows((prev) => prev + 1);
-    } else if (e.key === "Backspace" && rows > 2) {
-      setRows((prev) => prev - 1);
-    } else if (e.key === "Escape") {
-      setIsTyping(false);
-      setMsg("");
-      updateData(id, { isTyping: false });
+      boardRef?.current?.blur();
     }
   };
 
   const handleKeyDown = (event) => {
-    console.log("##keydown", event.key);
     let updatedData = {};
     switch (event.key) {
       case "ArrowUp":
@@ -139,22 +119,14 @@ export default function Home(props) {
           );
         })}
       </div>
-      {isTyping && (
-        <div className={styles2.editor}>
-          <textarea
-            ref={textareaRef}
-            value={msg}
-            autoFocus
-            className={styles2.input}
-            placeholder="Type your message..."
-            onChange={(e) => {
-              setMsg(e.target.value);
-            }}
-            onKeyPress={handleKeyPress}
-            rows={rows.toString()}
-          ></textarea>
-        </div>
-      )}
+      <Editor
+        id={id}
+        isTyping={isTyping}
+        msg={msg}
+        boardRef={boardRef}
+        setIsTyping={setIsTyping}
+        setMsg={setMsg}
+      />
     </div>
   );
 }

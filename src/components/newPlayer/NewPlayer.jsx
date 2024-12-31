@@ -19,6 +19,7 @@ function NewPlayer(props) {
       dir: 2,
       vector: 0,
       page: "home",
+      msg: "",
     };
     writeData(user?.id, player);
     // setupDisconnectHandler(user.uid);

@@ -23,7 +23,7 @@ export default function Character(props) {
       >
         {p.name} {site === "forest" && p.score}
       </div>
-      {p?.msg && (
+      {p?.msg?.trim()?.length !== 0 && (
         <div
           className={styles.msgContainer}
           style={{
