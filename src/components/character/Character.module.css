@@ -34,3 +34,20 @@
   text-align: center;
   transition: transform 0.45s ease;
 }
+.msgContainer {
+  position: absolute;
+  background: url(/public/msg/sideMsg.png) no-repeat center center / contain;
+  height: 4rem;
+  width: 8rem;
+  top: 0.3rem;
+  left: 2.7rem;
+  position: absolute;
+  transition: transform 0.45s ease-out;
+}
+.msg {
+  position: absolute;
+  display: flex;
+  left: 1rem;
+  top: 1rem;
+  align-items: center;
+}

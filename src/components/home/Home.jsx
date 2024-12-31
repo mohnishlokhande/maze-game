@@ -10,12 +10,16 @@ import { useEffect, useRef, useState } from "react";
 import Character from "../character";
 
 export default function Home(props) {
+  const textareaRef = useRef(null);
   const { players = [], myPlayer, setPage } = props;
   const { x, y, id, vector } = myPlayer;
   const boardRef = useRef(null);
-  const [hint, setHint] = useState("");
+  const [hint, setHint] = useState(
+    "Press Enter to type message, and again Enter to send it. Esc to cancel or delete."
+  );
   const [isTyping, setIsTyping] = useState(false);
   const [msg, setMsg] = useState("");
+  const [rows, setRows] = useState(2);
 
   const checkValidMove = (x, y) => {
     if (x < 0 || x >= homeBoard[0].length || y < 0 || y >= homeBoard.length)
@@ -31,6 +35,26 @@ export default function Home(props) {
     } else if (checkValidMove(x, y) === 1) {
       setIsTyping(true);
       updateData(id, { isTyping: true });
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    console.log("##keypress", e.key);
+    if (e.key === "Enter" && !e.shiftKey && msg) {
+      e.preventDefault();
+      updateData(id, { isTyping: false, msg: msg });
+      setIsTyping(false);
+      setMsg("");
+      setRows(2);
+      boardRef?.current?.focus();
+    } else if (e.key === "Enter" && e.shiftKey && rows < 16) {
+      setRows((prev) => prev + 1);
+    } else if (e.key === "Backspace" && rows > 2) {
+      setRows((prev) => prev - 1);
+    } else if (e.key === "Escape") {
+      setIsTyping(false);
+      setMsg("");
+      updateData(id, { isTyping: false });
     }
   };
 
@@ -68,6 +92,8 @@ export default function Home(props) {
         onEnter();
         break;
       case "Escape":
+        setMsg("");
+        updateData(id, { isTyping: false, msg: "" });
         break;
       default:
         break;
@@ -78,7 +104,9 @@ export default function Home(props) {
     if (x === 0 && y === 4) {
       setHint("Press enter");
     } else {
-      setHint("");
+      setHint(
+        "Press Enter to type message, and again Enter to send it. Esc to cancel or delete."
+      );
     }
   }, [x, y]);
 
@@ -113,14 +141,18 @@ export default function Home(props) {
       </div>
       {isTyping && (
         <div className={styles2.editor}>
-          <input
-            type="text"
-            className={styles2.input}
+          <textarea
+            ref={textareaRef}
             value={msg}
+            autoFocus
+            className={styles2.input}
+            placeholder="Type your message..."
             onChange={(e) => {
               setMsg(e.target.value);
             }}
-          />
+            onKeyPress={handleKeyPress}
+            rows={rows.toString()}
+          ></textarea>
         </div>
       )}
     </div>

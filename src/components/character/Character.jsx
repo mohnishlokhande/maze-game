@@ -7,7 +7,7 @@ export default function Character(props) {
 
   if (p?.page !== site) return null;
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <div
         className={`${styles.mycharacter} ${styles[charDirection[p?.dir]]}`}
         style={{
@@ -23,6 +23,16 @@ export default function Character(props) {
       >
         {p.name} {site === "forest" && p.score}
       </div>
+      {p?.msg && (
+        <div
+          className={styles.msgContainer}
+          style={{
+            transform: `translate(${p?.x * 4}rem, ${p?.y * 4}rem)`,
+          }}
+        >
+          <div className={styles.msg}>{p.msg}</div>
+        </div>
+      )}
     </div>
   );
 }
