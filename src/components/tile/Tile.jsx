@@ -4,10 +4,10 @@ import PropTypes from "prop-types";
 
 function Tile(props) {
   // eslint-disable-next-line no-unused-vars
-  const { isActive = false, type = "empty" } = props;
+  const { isActive = false, type = "empty", site = "home" } = props;
 
   const content = {
-    [TILE_TYPES.GRASS]: "☘️",
+    [TILE_TYPES.GRASS]: site === "home" ? "" : "☘️",
     [TILE_TYPES.WATER]: "",
     [TILE_TYPES.ROCK]: "⛰️",
     [TILE_TYPES.EMPTY]: "",
@@ -26,4 +26,5 @@ export default Tile;
 Tile.propTypes = {
   isActive: PropTypes.bool,
   type: PropTypes.string,
+  site: PropTypes.string,
 };

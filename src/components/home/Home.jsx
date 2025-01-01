@@ -42,7 +42,7 @@ export default function Home(props) {
       setPage("freeway");
     } else if (homeBoard[y][x] === TILE_TYPES.SELL_APPLE) {
       updateData(id, { score: 0 });
-    } else if (checkValidMove(x, y) === 1) {
+    } else if (checkValidMove(x, y) === 1 || checkValidMove(x, y) === 0) {
       boardRef?.current?.blur();
       setIsTyping(true);
       updateData(id, { isTyping: true });
@@ -121,7 +121,7 @@ export default function Home(props) {
             return (
               <div key={rowIndex} className={styles.row}>
                 {row.map((col, colIndex) => {
-                  return <Tile key={colIndex} type={col} />;
+                  return <Tile key={colIndex} type={col} site="home" />;
                 })}
               </div>
             );

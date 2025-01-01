@@ -154,7 +154,14 @@ function FreeWay(props) {
               {row.map((col, colIndex) => {
                 const isActive =
                   position.row === rowIndex && position.col === colIndex;
-                return <Tile key={colIndex} isActive={isActive} tile={col} />;
+                return (
+                  <Tile
+                    key={colIndex}
+                    isActive={isActive}
+                    tile={col}
+                    site="freeway"
+                  />
+                );
               })}
             </div>
           );

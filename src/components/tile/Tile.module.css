@@ -13,11 +13,11 @@
 }
 .grass {
   background: radial-gradient(
-    circle,
-    rgb(157 240 148 / 80%) 0%,
-    rgba(5, 86, 5, 0.87) 120%
-  );
-  /* background: url(/public/grass.png) no-repeat center bottom / contain; */
+      circle,
+      rgb(157 240 148 / 80%) 0%,
+      rgba(5, 86, 5, 0.87) 120%
+    ),
+    url(/grass.png) no-repeat center bottom / contain;
 }
 .water {
   background: radial-gradient(

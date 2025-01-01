@@ -142,7 +142,12 @@ function Board(props) {
                 const isActive =
                   activeRow === rowIndex && activeCol === colIndex;
                 return (
-                  <Tile key={colIndex} isActive={isActive} type={col?.type} />
+                  <Tile
+                    key={colIndex}
+                    isActive={isActive}
+                    type={col?.type}
+                    site="forest"
+                  />
                 );
               })}
             </div>
