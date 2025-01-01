@@ -23,15 +23,19 @@ export default function Character(props) {
       >
         {p.name} {site === "forest" && p.score}
       </div>
-      {p?.msg?.trim()?.length !== 0 && (
-        <div
-          className={styles.msgContainer}
-          style={{
-            transform: `translate(${p?.x * 4}rem, ${p?.y * 4}rem)`,
-          }}
-        >
-          <div className={styles.msg}>{p.msg}</div>
-        </div>
+      {(p?.msg?.trim()?.length !== 0 || p?.isTyping == true) && (
+        <>
+          <div
+            style={{
+              transform: `translate(${p?.x * 4}rem, ${p?.y * 4}rem)`,
+            }}
+            className={styles.msgContainer}
+          >
+            {p.isTyping && <span className={styles.typing}>.....</span>}
+            <div className={styles.msg}>{p.msg}</div>
+            <div className={styles.msgArrow} />
+          </div>
+        </>
       )}
     </div>
   );
