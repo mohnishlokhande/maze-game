@@ -20,10 +20,15 @@ export default function Home(props) {
   const [isTyping, setIsTyping] = useState(false);
   const [msg, setMsg] = useState("");
 
+  const alreadyOccupied = (x, y) => {
+    return players.some((p) => p.x === x && p.y === y);
+  };
+
   const checkValidMove = (x, y) => {
     if (x < 0 || x >= homeBoard[0].length || y < 0 || y >= homeBoard.length)
       return 2;
     else if (homeBoard[y][x] === TILE_TYPES.WATER) return 0;
+    else if (alreadyOccupied(x, y)) return 0;
     else return 1;
   };
 
@@ -49,27 +54,23 @@ export default function Home(props) {
     let updatedData = {};
     switch (event.key) {
       case "ArrowUp":
-        if (!checkValidMove(x, y - 1)) return;
-        updatedData = {
-          y: y - 1,
-          dir: 0,
-          vector: (vector + 1) % 4,
-        };
+        updatedData = { dir: 0, vector: (vector + 1) % 4 };
+        if (checkValidMove(x, y - 1)) updatedData.y = y - 1;
         updateData(id, updatedData);
         break;
       case "ArrowRight":
-        if (!checkValidMove(x + 1, y)) return;
-        updatedData = { x: x + 1, dir: 1, vector: (vector + 1) % 4 };
+        updatedData = { dir: 1, vector: (vector + 1) % 4 };
+        if (checkValidMove(x + 1, y)) updatedData.x = x + 1;
         updateData(id, updatedData);
         break;
       case "ArrowDown":
-        if (!checkValidMove(x, y + 1)) return;
-        updatedData = { y: y + 1, dir: 2, vector: (vector + 1) % 4 };
+        updatedData = { dir: 2, vector: (vector + 1) % 4 };
+        if (checkValidMove(x, y + 1)) updatedData.y = y + 1;
         updateData(id, updatedData);
         break;
       case "ArrowLeft":
-        updatedData = { x: x - 1, dir: 3, vector: (vector + 1) % 4 };
-        if (!checkValidMove(x - 1, y)) return;
+        updatedData = { dir: 3, vector: (vector + 1) % 4 };
+        if (checkValidMove(x - 1, y)) updatedData.x = x - 1;
         updateData(id, updatedData);
         break;
       case " ":
