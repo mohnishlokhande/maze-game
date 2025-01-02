@@ -39,7 +39,6 @@ export default function Editor(props) {
         className={styles.input}
         placeholder="Type your message..."
         onChange={(e) => {
-          console.log("##onChange", e.target.value, e.target.value?.length);
           setMsg(e.target.value);
         }}
         onKeyUp={handleKeyPress}

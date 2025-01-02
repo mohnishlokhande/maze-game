@@ -46,12 +46,10 @@ export const generateRandomBoard = (rows, cols) => {
 };
 
 const alreadyOccupied = (x, y, players) => {
-  console.log("event.key4", players);
   return players?.some((p) => p.x === x && p.y === y);
 };
 
 const checkValidMove = (x, y, players) => {
-  console.log("event.key3", players);
   if (x < 0 || x >= homeBoard[0].length || y < 0 || y >= homeBoard.length)
     return 2;
   else if (homeBoard[y][x] === TILE_TYPES.WATER) return 0;
@@ -59,8 +57,7 @@ const checkValidMove = (x, y, players) => {
   else return 1;
 };
 
-const onEnter = (id, x, y, setPage, setIsTyping, players, boardRef) => {
-  console.log("event.key2", players);
+const onEnter = (id, x, y, setPage, players, typingCallback) => {
   let valid = checkValidMove(x, y, players);
   if (valid === 2) return;
   if (homeBoard[y][x] === TILE_TYPES.GAME) {
@@ -72,8 +69,7 @@ const onEnter = (id, x, y, setPage, setIsTyping, players, boardRef) => {
   } else if (homeBoard[y][x] === TILE_TYPES.SELL_APPLE) {
     updateData(id, { score: 0 });
   } else if (valid === 1 || valid === 0) {
-    boardRef?.current?.blur();
-    setIsTyping(true);
+    typingCallback();
     updateData(id, { isTyping: true });
   }
 };
@@ -83,17 +79,13 @@ export const handleKeyDownEvents = (
   x,
   y,
   vector,
-  event,
-  setMsg,
+  key,
   setPage,
-  setIsTyping,
-  boardRef,
+  typingCallback,
   players
 ) => {
-  event.preventDefault();
   let updatedData = {};
-  console.log("event.key", players);
-  switch (event.key) {
+  switch (key) {
     case "ArrowUp":
       updatedData = { dir: 0, vector: (vector + 1) % 4 };
       if (checkValidMove(x, y - 1, players)) updatedData.y = y - 1;
@@ -117,10 +109,9 @@ export const handleKeyDownEvents = (
     case " ":
       break;
     case "Enter":
-      onEnter(id, x, y, setPage, setIsTyping, players, boardRef);
+      onEnter(id, x, y, setPage, players, typingCallback);
       break;
     case "Escape":
-      setMsg("");
       updateData(id, { isTyping: false, msg: "" });
       break;
     default:

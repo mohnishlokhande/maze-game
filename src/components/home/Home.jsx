@@ -19,17 +19,21 @@ export default function Home() {
   const [isTyping, setIsTyping] = useState(false);
   const [msg, setMsg] = useState("");
 
+  const typingCallback = () => {
+    boardRef?.current?.blur();
+    setIsTyping(true);
+  };
+
   const handleKeyDown = (event) => {
+    event.preventDefault();
     handleKeyDownEvents(
       id,
       x,
       y,
       vector,
-      event,
-      setMsg,
+      event.key,
       setPage,
-      setIsTyping,
-      boardRef,
+      typingCallback,
       players
     );
   };
