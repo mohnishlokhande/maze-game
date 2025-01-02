@@ -2,14 +2,15 @@ import { homeBoard } from "../../utils/board";
 import Tile from "../tile";
 import styles from "../board/Board.module.css";
 import styles2 from "./Home.module.css";
-import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import Character from "../character";
 import Editor from "../editor";
 import { handleKeyDownEvents } from "../../utils/helper";
+import { useMyPlayerStore, usePlayersStore } from "../../store/playerStates";
 
-export default function Home(props) {
-  const { players = [], myPlayer, setPage } = props;
+export default function Home() {
+  const { myPlayer, setPage } = useMyPlayerStore();
+  const { players } = usePlayersStore();
   const { x, y, id, vector } = myPlayer;
   const boardRef = useRef(null);
   const [hint, setHint] = useState(
@@ -85,9 +86,3 @@ export default function Home(props) {
     </>
   );
 }
-
-Home.propTypes = {
-  players: PropTypes.array,
-  myPlayer: PropTypes.object,
-  setPage: PropTypes.func,
-};

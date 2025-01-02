@@ -6,9 +6,12 @@ import { TILE_TYPES } from "../../utils/constants";
 import { generateRandomBoard } from "../../utils/helper";
 import { updateData } from "../../api/Api";
 import Character from "../character";
+import { useMyPlayerStore, usePlayersStore } from "../../store/playerStates";
 
 function Board(props) {
-  const { rows, cols, players = [], myPlayer, setPage } = props;
+  const { rows, cols } = props;
+  const { myPlayer, setPage } = useMyPlayerStore();
+  const { players } = usePlayersStore();
   const boardRef = useRef(null);
   const [score, setScore] = useState(0);
   const [board, setBoard] = useState(() => {
@@ -163,7 +166,4 @@ export default Board;
 Board.propTypes = {
   rows: PropTypes.number.isRequired,
   cols: PropTypes.number.isRequired,
-  players: PropTypes.array,
-  myPlayer: PropTypes.object,
-  setPage: PropTypes.func,
 };

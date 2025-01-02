@@ -7,12 +7,12 @@ import NewPlayer from "./components/newPlayer";
 import { deleteData, updateData } from "./api/Api";
 import Home from "./components/home";
 import FreeWay from "./components/freeWay/FreeWay";
+import { useMyPlayerStore, usePlayersStore } from "./store/playerStates";
 
 function App() {
   const [newPlayer, setNewPlayer] = useState(true);
-  const [myPlayer, setMyPlayer] = useState({});
-  const [players, setPlayers] = useState([]);
-  const [page, setPage] = useState("home");
+  const { myPlayer, setMyPlayer, page, setPage } = useMyPlayerStore();
+  const { setPlayers } = usePlayersStore();
 
   const checkPlayer = (obj) => {
     if (!obj) return;
@@ -77,27 +77,9 @@ function App() {
         <button onClick={backHome}>Home</button>
         <button onClick={onReset}>Reset</button>
       </div>
-      {page === "home" && (
-        <Home myPlayer={myPlayer} players={players} setPage={setPage} />
-      )}
-      {page === "forest" && (
-        <Board
-          rows={9}
-          cols={12}
-          myPlayer={myPlayer}
-          players={players}
-          setPage={setPage}
-        />
-      )}
-      {page === "freeWay" && (
-        <FreeWay
-          rows={10}
-          cols={10}
-          myPlayer={myPlayer}
-          players={players}
-          // setPage={setPage}
-        />
-      )}
+      {page === "home" && <Home />}
+      {page === "forest" && <Board rows={9} cols={12} />}
+      {page === "freeWay" && <FreeWay rows={10} cols={10} />}
     </>
   );
 }

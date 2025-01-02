@@ -4,9 +4,11 @@ import styles from "../board/Board.module.css";
 import PropTypes from "prop-types";
 import { TILE_TYPES } from "../../utils/constants";
 import Character from "../character";
+import { usePlayersStore } from "../../store/playerStates";
 
 function FreeWay(props) {
-  const { rows, cols, myPlayer, players } = props;
+  const { rows, cols } = props;
+  const { players } = usePlayersStore();
   const [board] = useState(() => {
     let grid = [];
     for (let i = 0; i < rows; i++) {
@@ -176,6 +178,4 @@ export default FreeWay;
 FreeWay.propTypes = {
   rows: PropTypes.number.isRequired,
   cols: PropTypes.number.isRequired,
-  players: PropTypes.array,
-  myPlayer: PropTypes.object,
 };
