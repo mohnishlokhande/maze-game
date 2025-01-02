@@ -45,32 +45,39 @@ export const generateRandomBoard = (rows, cols) => {
   return board;
 };
 
-const alreadyOccupied = (x, y, players) => {
-  return players?.some((p) => p.x === x && p.y === y);
-};
+const alreadyOccupied = (x, y, players) =>
+  players?.some((p) => p.x === x && p.y === y);
 
 const checkValidMove = (x, y, players) => {
   if (x < 0 || x >= homeBoard[0].length || y < 0 || y >= homeBoard.length)
     return 2;
-  else if (homeBoard[y][x] === TILE_TYPES.WATER) return 0;
-  else if (alreadyOccupied(x, y, players)) return 0;
-  else return 1;
+  if (homeBoard[y][x] === TILE_TYPES.WATER || alreadyOccupied(x, y, players))
+    return 0;
+  return 1;
 };
 
 const onEnter = (id, x, y, setPage, players, typingCallback) => {
-  let valid = checkValidMove(x, y, players);
+  const valid = checkValidMove(x, y, players);
   if (valid === 2) return;
-  if (homeBoard[y][x] === TILE_TYPES.GAME) {
-    updateData(id, { page: "forest" });
-    setPage("forest");
-  } else if (homeBoard[y][x] === TILE_TYPES.FREE_WAY) {
-    updateData(id, { page: "freeway" });
-    setPage("freeway");
-  } else if (homeBoard[y][x] === TILE_TYPES.SELL_APPLE) {
-    updateData(id, { score: 0 });
-  } else if (valid === 1 || valid === 0) {
-    typingCallback();
-    updateData(id, { isTyping: true });
+
+  switch (homeBoard[y][x]) {
+    case TILE_TYPES.GAME:
+      updateData(id, { page: "forest" });
+      setPage("forest");
+      break;
+    case TILE_TYPES.FREE_WAY:
+      updateData(id, { page: "freeway" });
+      setPage("freeway");
+      break;
+    case TILE_TYPES.SELL_APPLE:
+      updateData(id, { score: 0 });
+      break;
+    default:
+      if (valid === 1 || valid === 0) {
+        typingCallback();
+        updateData(id, { isTyping: true });
+      }
+      break;
   }
 };
 
@@ -84,37 +91,28 @@ export const handleKeyDownEvents = (
   typingCallback,
   players
 ) => {
-  let updatedData = {};
-  switch (key) {
-    case "ArrowUp":
-      updatedData = { dir: 0, vector: (vector + 1) % 4 };
-      if (checkValidMove(x, y - 1, players)) updatedData.y = y - 1;
-      updateData(id, updatedData);
-      break;
-    case "ArrowRight":
-      updatedData = { dir: 1, vector: (vector + 1) % 4 };
-      if (checkValidMove(x + 1, y, players)) updatedData.x = x + 1;
-      updateData(id, updatedData);
-      break;
-    case "ArrowDown":
-      updatedData = { dir: 2, vector: (vector + 1) % 4 };
-      if (checkValidMove(x, y + 1, players)) updatedData.y = y + 1;
-      updateData(id, updatedData);
-      break;
-    case "ArrowLeft":
-      updatedData = { dir: 3, vector: (vector + 1) % 4 };
-      if (checkValidMove(x - 1, y, players)) updatedData.x = x - 1;
-      updateData(id, updatedData);
-      break;
-    case " ":
-      break;
-    case "Enter":
-      onEnter(id, x, y, setPage, players, typingCallback);
-      break;
-    case "Escape":
-      updateData(id, { isTyping: false, msg: "" });
-      break;
-    default:
-      break;
+  const moveMap = {
+    ArrowUp: { dir: 0, dx: 0, dy: -1 },
+    ArrowRight: { dir: 1, dx: 1, dy: 0 },
+    ArrowDown: { dir: 2, dx: 0, dy: 1 },
+    ArrowLeft: { dir: 3, dx: -1, dy: 0 },
+  };
+
+  if (key in moveMap) {
+    const { dir, dx, dy } = moveMap[key];
+    const newX = x + dx;
+    const newY = y + dy;
+    const updatedData = { dir, vector: (vector + 1) % 4 };
+
+    if (checkValidMove(newX, newY, players)) {
+      if (dx !== 0) updatedData.x = newX;
+      if (dy !== 0) updatedData.y = newY;
+    }
+
+    updateData(id, updatedData);
+  } else if (key === "Enter") {
+    onEnter(id, x, y, setPage, players, typingCallback);
+  } else if (key === "Escape") {
+    updateData(id, { isTyping: false, msg: "" });
   }
 };
