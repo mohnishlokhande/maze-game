@@ -122,11 +122,7 @@ export const handleKeyDownEvents = (
         updatedData.x = newX;
         updatedData.y = newY;
       }
-    } else if (
-      otherPlayer === 1 ||
-      otherPlayer === 2 ||
-      (otherPlayer?.id && !isShiftPressed)
-    ) {
+    } else if (otherPlayer === 1 || otherPlayer === 2) {
       if (dx !== 0) updatedData.x = newX;
       if (dy !== 0) updatedData.y = newY;
     }
