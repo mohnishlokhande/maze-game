@@ -6,15 +6,18 @@ import { useEffect, useRef, useState } from "react";
 import Character from "../character";
 import { getTime, handleKeyDownEvents } from "../../utils/helper";
 import {
+  useConversationStore,
   useEditorStore,
   useMyPlayerStore,
   usePlayersStore,
 } from "../../store/playerStates";
+import { deleteData } from "../../api/Api";
 
 export default function Home() {
   const { myPlayer, setPage } = useMyPlayerStore();
   const { players } = usePlayersStore();
   const { isTyping, setIsTyping } = useEditorStore();
+  const { conversations } = useConversationStore();
   const { x, y } = myPlayer;
   const boardRef = useRef(null);
   const [hint, setHint] = useState(
@@ -38,6 +41,10 @@ export default function Home() {
       players,
       homeBoard
     );
+  };
+
+  const resetConversations = () => {
+    deleteData("conversations");
   };
 
   useEffect(() => {
@@ -64,8 +71,6 @@ export default function Home() {
 
   return (
     <div className={styles2.homeContainer}>
-      {/* Living area
-      <div className={styles2.hint}>Hint: {hint}</div> */}
       <div className={styles2.col}>
         <div className={styles2.hint}>Hint: {hint}</div>
         <div className={styles2.heading}>Active players</div>
@@ -106,7 +111,29 @@ export default function Home() {
           })}
         </div>
       </div>
-      <div className={styles2.col}>Recent Chats</div>
+      <div className={styles2.col}>
+        <div className={styles2.heading}>
+          Recent Chats{" "}
+          <div className={styles2.deleteChats} onClick={resetConversations}>
+            🗑️
+          </div>{" "}
+        </div>
+        <div className={styles2.recentChats}>
+          {conversations?.map((c, index) => {
+            return (
+              <div key={index} className={styles2.chat}>
+                <div>
+                  <span className={styles2.senderName}>{c.senderName}</span>{" "}
+                  <span className={styles2.msg}>{c.msg}</span>
+                </div>
+                <div className={styles2.msgTime}>
+                  {getTime(c.createdAt)?.time}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

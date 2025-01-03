@@ -13,7 +13,8 @@
 /* .image {
   width: 100px;
   height: 100px;
-  background: url(/public/vite.svg) no-repeat center center / contain;
+  background: url(
+  /vite.svg) no-repeat center center / contain;
   position: absolute;
   transition: transform 0.3s ease;
 } */

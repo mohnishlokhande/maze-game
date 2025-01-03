@@ -18,3 +18,8 @@ export const useEditorStore = create((set) => ({
   msg: "",
   setMsg: (msg) => set({ msg }),
 }));
+
+export const useConversationStore = create((set) => ({
+  conversations: [],
+  setConversations: (conversations) => set({ conversations }),
+}));

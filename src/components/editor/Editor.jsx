@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import styles from "./Editor.module.css";
 import { useRef, useState } from "react";
-import { updateData } from "../../api/Api";
+import { pushConversation, updateData } from "../../api/Api";
 import { useEditorStore, useMyPlayerStore } from "../../store/playerStates";
 
 export default function Editor() {
   const {
-    myPlayer: { id = "" },
+    myPlayer: { id = "", name = "" },
   } = useMyPlayerStore();
   const { isTyping, setIsTyping, msg, setMsg } = useEditorStore();
 
@@ -16,6 +16,7 @@ export default function Editor() {
     if (e.key === "Enter" && !e.shiftKey && msg?.trim().length > 0) {
       e.preventDefault();
       updateData(id, { isTyping: false, msg: msg });
+      pushConversation(id, name, msg);
       setIsTyping(false);
       setMsg("");
       setRows(2);

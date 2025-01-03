@@ -1,4 +1,4 @@
-import { ref, set, remove, update, onDisconnect } from "firebase/database";
+import { ref, get, set, remove, update, onDisconnect } from "firebase/database";
 import { database } from "../firebase-config";
 
 export const writeData = (id, player) => {
@@ -26,8 +26,8 @@ export const updateData = (id, obj, isOtherP = false) => {
     });
 };
 
-export const deleteData = (id) => {
-  const dbRef = ref(database, `players/${id}`);
+export const deleteData = (str) => {
+  const dbRef = ref(database, str);
   remove(dbRef)
     .then(() => {
       console.log("Data removed successfully!");
@@ -54,4 +54,29 @@ export const setupDisconnectHandler = (id, player) => {
     .catch((error) => {
       console.error("Error setting initial data:", error);
     });
+};
+
+export const pushConversation = async (id, senderName, msg) => {
+  const dbRef = ref(database, "conversations");
+  const msgObj = {
+    senderId: id,
+    senderName,
+    msg,
+    createdAt: new Date().toISOString(),
+  };
+  try {
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      const currentArray = snapshot.val();
+      const updatedArray = Array.isArray(currentArray)
+        ? [...currentArray, msgObj]
+        : [msgObj];
+      await set(dbRef, updatedArray);
+    } else {
+      await set(dbRef, [msgObj]);
+    }
+    console.log("Item added successfully!");
+  } catch (error) {
+    console.error("Error adding item to array:", error);
+  }
 };

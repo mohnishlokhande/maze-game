@@ -31,11 +31,15 @@
   /* border: 1px solid #fff; */
   height: 100%;
   padding: 1rem;
+  overflow: hidden;
 }
 .heading {
+  display: flex;
   font-size: large;
   padding: 1rem 0;
   font-weight: bolder;
+  width: 100%;
+  justify-content: space-between;
 }
 .row {
   display: flex;
@@ -46,4 +50,32 @@
   font-size: smaller;
   width: 100%;
   justify-content: space-between;
+}
+.recentChats {
+  width: 100%;
+}
+.chat {
+  display: flex;
+  position: relative;
+  padding: 4px 0;
+  width: 100%;
+}
+.msg {
+  font-weight: bold;
+  color: white;
+}
+.msgTime {
+  position: absolute;
+  right: -12px;
+  bottom: -2px;
+  font-size: xx-small;
+}
+.senderName {
+  font-size: small;
+  font-weight: bold;
+  color: rgba(240, 248, 255, 0.737);
+}
+.deleteChats {
+  cursor: pointer;
+  padding: 0 4px;
 }

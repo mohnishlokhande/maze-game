@@ -7,13 +7,18 @@ import NewPlayer from "./components/newPlayer";
 import { deleteData, updateData } from "./api/Api";
 import Home from "./components/home";
 import FreeWay from "./components/freeWay/FreeWay";
-import { useMyPlayerStore, usePlayersStore } from "./store/playerStates";
+import {
+  useConversationStore,
+  useMyPlayerStore,
+  usePlayersStore,
+} from "./store/playerStates";
 import Editor from "./components/editor";
 
 function App() {
   const [newPlayer, setNewPlayer] = useState(true);
   const { myPlayer, setMyPlayer, page, setPage } = useMyPlayerStore();
   const { setPlayers } = usePlayersStore();
+  const { setConversations } = useConversationStore();
 
   const checkPlayer = (obj) => {
     if (!obj) return;
@@ -30,7 +35,7 @@ function App() {
   };
 
   const onReset = () => {
-    deleteData(myPlayer?.id);
+    deleteData(`players/${myPlayer?.id}`);
     setNewPlayer(true);
     setMyPlayer({});
     window.location.reload();
@@ -59,6 +64,14 @@ function App() {
     const dbRef = ref(database, "players");
     const unsubscribe = onValue(dbRef, (snapshot) => {
       checkPlayer(snapshot.val());
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const dbRef = ref(database, "conversations");
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      setConversations(snapshot.val());
     });
     return () => unsubscribe();
   }, []);

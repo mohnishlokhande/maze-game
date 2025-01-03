@@ -193,11 +193,12 @@ export function getTime(
     var seconds = Math.floor((currentDate - actionDate) / 1000);
 
     if (seconds < 60) {
-      return (
-        Math.floor(seconds) +
-        " " +
-        [Math.floor(seconds) > 1 ? "seconds" : "second", "ago"].join(" ")
-      );
+      // return (
+      //   Math.floor(seconds) +
+      //   " " +
+      //   [Math.floor(seconds) > 1 ? "seconds" : "second", "ago"].join(" ")
+      // );
+      return "now";
     }
 
     let interval = seconds / 60;
