@@ -89,6 +89,7 @@ const onEnter = (myPlayer, setPage, players, typingCallback, board) => {
 export const handleKeyDownEvents = (
   myPlayer,
   key,
+  isShiftPressed,
   setPage,
   typingCallback,
   players,
@@ -110,7 +111,7 @@ export const handleKeyDownEvents = (
     const sidePlayer = { dir };
 
     const otherPlayer = checkValidMove(newX, newY, players, board, page);
-    if (otherPlayer?.id) {
+    if (otherPlayer?.id && isShiftPressed) {
       const newXP = newX + dx;
       const newYP = newY + dy;
       if (dx !== 0) sidePlayer.x = newXP;
@@ -121,7 +122,11 @@ export const handleKeyDownEvents = (
         updatedData.x = newX;
         updatedData.y = newY;
       }
-    } else if (otherPlayer === 1 || otherPlayer === 2) {
+    } else if (
+      otherPlayer === 1 ||
+      otherPlayer === 2 ||
+      (otherPlayer?.id && !isShiftPressed)
+    ) {
       if (dx !== 0) updatedData.x = newX;
       if (dy !== 0) updatedData.y = newY;
     }

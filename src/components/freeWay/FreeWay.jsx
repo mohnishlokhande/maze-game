@@ -35,6 +35,7 @@ function FreeWay(props) {
     handleKeyDownEvents(
       myPlayer,
       event.key,
+      event.shiftKey,
       setPage,
       typingCallback,
       players,

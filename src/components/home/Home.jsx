@@ -14,7 +14,7 @@ export default function Home() {
   const { x, y, id } = myPlayer;
   const boardRef = useRef(null);
   const [hint, setHint] = useState(
-    "Press Enter to type message, and again Enter to send it. Esc to cancel or delete."
+    "Press Enter to type message, and again Enter to send it. Esc to cancel or delete. Hold shift to move other players."
   );
   const [isTyping, setIsTyping] = useState(false);
   const [msg, setMsg] = useState("");
@@ -26,9 +26,11 @@ export default function Home() {
 
   const handleKeyDown = (event) => {
     event.preventDefault();
+    // console.log("##keydown", event);
     handleKeyDownEvents(
       myPlayer,
       event.key,
+      event.shiftKey,
       setPage,
       typingCallback,
       players,
@@ -41,7 +43,7 @@ export default function Home() {
       setHint("Press enter");
     } else {
       setHint(
-        "Press Enter to type message, and again Enter to send it. Esc to cancel or delete."
+        "Press Enter to type message, and again Enter to send it. Esc to cancel or delete. Hold shift to move other players."
       );
     }
   }, [x, y]);
