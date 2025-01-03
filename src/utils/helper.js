@@ -187,6 +187,7 @@ export function getTime(
 
   const currentDate = changeTimeZone(new Date(), timeZone, locale);
   const actionDate = changeTimeZone(dateObj, timeZone, locale);
+  let isActive = true;
 
   function timeSince() {
     var seconds = Math.floor((currentDate - actionDate) / 1000);
@@ -200,6 +201,9 @@ export function getTime(
     }
 
     let interval = seconds / 60;
+    if (interval > 2) {
+      isActive = false;
+    }
     if (interval < 60) {
       return (
         Math.floor(interval) +
@@ -228,5 +232,6 @@ export function getTime(
 
     return formatDate(dateStr, dateFormat, timeZone, locale);
   }
-  return timeSince();
+  let time = timeSince();
+  return { time, isActive };
 }

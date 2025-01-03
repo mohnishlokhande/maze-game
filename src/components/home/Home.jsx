@@ -70,13 +70,16 @@ export default function Home() {
         <div className={styles2.hint}>Hint: {hint}</div>
         <div className={styles2.heading}>Active players</div>
         {players?.map((p) => {
+          const timeAgo = getTime(p?.modifiedAt);
           return (
             <div key={p.id} className={styles2.activePlayer}>
               <div className={styles2.row}>
-                <span style={{ paddingRight: "4px" }}>🟢</span>
+                <span style={{ paddingRight: "4px" }}>
+                  {timeAgo?.isActive ? "🟢" : "🔴"}
+                </span>
                 {p.name}
               </div>
-              <div>{getTime(p?.modifiedAt)}</div>
+              <div>{timeAgo?.time}</div>
             </div>
           );
         })}
