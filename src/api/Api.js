@@ -12,9 +12,12 @@ export const writeData = (id, player) => {
     });
 };
 
-export const updateData = (id, obj) => {
+export const updateData = (id, obj, isOtherP = false) => {
   const dbRef = ref(database, `players/${id}`);
-  update(dbRef, { ...obj, modifiedAt: new Date().toISOString() })
+  const updatedObj = isOtherP
+    ? obj
+    : { ...obj, modifiedAt: new Date().toISOString() };
+  update(dbRef, updatedObj)
     .then(() => {
       console.log("Data updated successfully!");
     })

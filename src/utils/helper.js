@@ -118,7 +118,7 @@ export const handleKeyDownEvents = (
       if (dy !== 0) sidePlayer.y = newYP;
       const isValid = checkValidMove(newXP, newYP, players, board, page);
       if (isValid === 1) {
-        updateData(otherPlayer?.id, sidePlayer);
+        updateData(otherPlayer?.id, sidePlayer, true);
         updatedData.x = newX;
         updatedData.y = newY;
       }
