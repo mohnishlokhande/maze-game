@@ -14,7 +14,7 @@ export const writeData = (id, player) => {
 
 export const updateData = (id, obj) => {
   const dbRef = ref(database, `players/${id}`);
-  update(dbRef, obj)
+  update(dbRef, { ...obj, modifiedAt: new Date().toLocaleString() })
     .then(() => {
       console.log("Data updated successfully!");
     })
@@ -37,7 +37,6 @@ export const deleteData = (id) => {
 export const setupDisconnectHandler = (id, player) => {
   const userStatusRef = ref(database, `players/${id}`);
 
-  // Set initial data
   set(userStatusRef, player)
     .then(() => {
       onDisconnect(userStatusRef)

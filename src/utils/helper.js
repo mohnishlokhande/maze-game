@@ -133,3 +133,188 @@ export const handleKeyDownEvents = (
     updateData(id, { isTyping: false, msg: "" });
   }
 };
+
+function changeTimeZone(date, timeZone, locale) {
+  if (typeof date === "string") {
+    return new Date(
+      new Date(date).toLocaleString(locale, {
+        timeZone,
+      })
+    );
+  }
+
+  return new Date(
+    date.toLocaleString(locale, {
+      timeZone,
+    })
+  );
+}
+
+function formatDate(
+  dateStr,
+  dateFormat = "dd/mm/yyyy",
+  timeZone = "",
+  locale = "us"
+) {
+  let fullDate = new Date(dateStr);
+  if (timeZone) {
+    fullDate = new Date(fullDate.toLocaleString(locale, { timeZone }));
+  }
+  if (fullDate.toString() === "Invalid Date") {
+    return dateStr;
+  }
+  let month = "" + (fullDate.getMonth() + 1);
+  let day = "" + fullDate.getDate();
+  const year = fullDate.getFullYear().toString();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return dateFormat
+    .replace("dd", day)
+    .replace("mm", month)
+    .replace("yyyy", year);
+}
+
+export function getTime(dateStr, intl, timeZone, dateFormat) {
+  const locale = "en-US";
+  const dateObj = new Date(dateStr);
+
+  const currentDate = changeTimeZone(new Date(), timeZone, locale);
+  const actionDate = changeTimeZone(dateObj, timeZone, locale);
+
+  function forTimeUnit(interval, unitTime) {
+    switch (unitTime) {
+      case "second":
+        return Math.floor(interval) > 1
+          ? intl.formatMessage({
+              id: "transaction.list.date.seconds",
+            })
+          : intl.formatMessage({
+              id: "transaction.list.date.second",
+            });
+      case "minute":
+        return Math.floor(interval) > 1
+          ? intl.formatMessage({
+              id: "transaction.list.date.minutes",
+            })
+          : intl.formatMessage({
+              id: "transaction.list.date.minute",
+            });
+      case "hour":
+        return Math.floor(interval) > 1
+          ? intl.formatMessage({
+              id: "transaction.list.date.hours",
+            })
+          : intl.formatMessage({
+              id: "transaction.list.date.hour",
+            });
+      case "day":
+        return Math.floor(interval) > 1
+          ? intl.formatMessage({
+              id: "transaction.list.date.days",
+            })
+          : intl.formatMessage({
+              id: "transaction.list.date.day",
+            });
+    }
+  }
+
+  function forFranceSince(interval, unitTime) {
+    return [
+      intl.formatMessage({ id: "transaction.list.date.ago" }),
+      Math.floor(interval),
+      forTimeUnit(interval, unitTime),
+    ].join(" ");
+  }
+
+  function timeSince() {
+    var seconds = Math.floor((currentDate - actionDate) / 1000);
+
+    if (seconds < 60) {
+      if (intl.locale === "fr") {
+        return forFranceSince(seconds, "second");
+      }
+      return (
+        Math.floor(seconds) +
+        " " +
+        [
+          Math.floor(seconds) > 1
+            ? intl.formatMessage({
+                id: "transaction.list.date.seconds",
+              })
+            : intl.formatMessage({
+                id: "transaction.list.date.second",
+              }),
+          intl.formatMessage({ id: "transaction.list.date.ago" }),
+        ].join(" ")
+      );
+    }
+
+    let interval = seconds / 60;
+    if (interval < 60) {
+      if (intl.locale === "fr") {
+        return forFranceSince(interval, "minute");
+      }
+      return (
+        Math.floor(interval) +
+        " " +
+        [
+          Math.floor(interval) > 1
+            ? intl.formatMessage({
+                id: "transaction.list.date.minutes",
+              })
+            : intl.formatMessage({
+                id: "transaction.list.date.minute",
+              }),
+          intl.formatMessage({ id: "transaction.list.date.ago" }),
+        ].join(" ")
+      );
+    }
+
+    interval = seconds / 3600;
+    if (interval <= 24) {
+      if (intl.locale === "fr") {
+        return forFranceSince(interval, "hour");
+      }
+      return (
+        Math.floor(interval) +
+        " " +
+        [
+          Math.floor(interval) > 1
+            ? intl.formatMessage({
+                id: "transaction.list.date.hours",
+              })
+            : intl.formatMessage({
+                id: "transaction.list.date.hour",
+              }),
+          intl.formatMessage({ id: "transaction.list.date.ago" }),
+        ].join(" ")
+      );
+    }
+
+    interval = seconds / 86400;
+    if (interval <= 3) {
+      if (intl.locale === "fr") {
+        return forFranceSince(interval, "day");
+      }
+      return (
+        Math.floor(interval) +
+        " " +
+        [
+          Math.floor(interval) > 1
+            ? intl.formatMessage({
+                id: "transaction.list.date.days",
+              })
+            : intl.formatMessage({
+                id: "transaction.list.date.day",
+              }),
+          intl.formatMessage({ id: "transaction.list.date.ago" }),
+        ].join(" ")
+      );
+    }
+
+    return formatDate(dateStr, dateFormat, timeZone, locale);
+  }
+  return timeSince();
+}

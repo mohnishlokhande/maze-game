@@ -63,15 +63,31 @@ export default function Home() {
   }, [isTyping]);
 
   return (
-    <>
+    <div className={styles2.homeContainer}>
+      {/* Living area
+      <div className={styles2.hint}>Hint: {hint}</div> */}
+      <div className={styles2.col}>
+        <div className={styles2.hint}>Hint: {hint}</div>
+        <div className={styles2.heading}>Active players</div>
+        {players?.map((p) => {
+          return (
+            <div key={p.id} className={styles2.activePlayer}>
+              <div className={styles2.row}>
+                <span style={{ paddingRight: "4px" }}>🟢</span>
+                {p.name}
+              </div>
+              <div>{p?.modifiedAt}</div>
+            </div>
+          );
+        })}
+      </div>
       <div
         className={styles2.home}
         tabIndex="0"
         onKeyDown={handleKeyDown}
         ref={boardRef}
       >
-        Living area
-        <div className={styles2.hint}>Hint: {hint}</div>
+        <h2>Living area</h2>
         <div>
           {players?.map((p) => {
             return <Character key={p.id} p={p} site="home" />;
@@ -87,6 +103,7 @@ export default function Home() {
           })}
         </div>
       </div>
-    </>
+      <div className={styles2.col}>Recent Chats</div>
+    </div>
   );
 }
