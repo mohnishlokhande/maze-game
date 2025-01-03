@@ -201,7 +201,7 @@ export function getTime(
     }
 
     let interval = seconds / 60;
-    if (interval > 2) {
+    if (interval > 4) {
       isActive = false;
     }
     if (interval < 60) {
