@@ -69,7 +69,7 @@ export const pushConversation = async (id, senderName, msg) => {
     if (snapshot.exists()) {
       const currentArray = snapshot.val();
       const updatedArray = Array.isArray(currentArray)
-        ? [...currentArray, msgObj]
+        ? [msgObj, ...currentArray]
         : [msgObj];
       await set(dbRef, updatedArray);
     } else {
