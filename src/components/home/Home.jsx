@@ -4,7 +4,7 @@ import styles from "../board/Board.module.css";
 import styles2 from "./Home.module.css";
 import { useEffect, useRef, useState } from "react";
 import Character from "../character";
-import { handleKeyDownEvents } from "../../utils/helper";
+import { getTime, handleKeyDownEvents } from "../../utils/helper";
 import {
   useEditorStore,
   useMyPlayerStore,
@@ -76,7 +76,7 @@ export default function Home() {
                 <span style={{ paddingRight: "4px" }}>🟢</span>
                 {p.name}
               </div>
-              <div>{p?.modifiedAt}</div>
+              <div>{getTime(p?.modifiedAt)}</div>
             </div>
           );
         })}
