@@ -4,7 +4,11 @@ import styles from "../board/Board.module.css";
 import PropTypes from "prop-types";
 import { TILE_TYPES } from "../../utils/constants";
 import Character from "../character";
-import { useMyPlayerStore, usePlayersStore } from "../../store/playerStates";
+import {
+  useEditorStore,
+  useMyPlayerStore,
+  usePlayersStore,
+} from "../../store/playerStates";
 import { handleKeyDownEvents } from "../../utils/helper";
 
 function FreeWay(props) {
@@ -12,6 +16,7 @@ function FreeWay(props) {
   const boardRef = useRef(null);
   const { myPlayer, setPage } = useMyPlayerStore();
   const { players } = usePlayersStore();
+  const { isTyping, setIsTyping } = useEditorStore();
   const [board] = useState(() => {
     let grid = [];
     for (let i = 0; i < rows; i++) {
@@ -27,7 +32,7 @@ function FreeWay(props) {
 
   const typingCallback = () => {
     boardRef?.current?.blur();
-    // setIsTyping(true);
+    setIsTyping(true);
   };
 
   const handleKeyDown = (event) => {
@@ -42,6 +47,12 @@ function FreeWay(props) {
       board
     );
   };
+
+  useEffect(() => {
+    if (!isTyping) {
+      boardRef?.current?.focus();
+    }
+  }, [isTyping]);
 
   useEffect(() => {
     if (boardRef) {

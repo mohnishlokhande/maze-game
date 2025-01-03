@@ -11,3 +11,10 @@ export const useMyPlayerStore = create((set) => ({
   page: "home",
   setPage: (page) => set({ page }),
 }));
+
+export const useEditorStore = create((set) => ({
+  isTyping: false,
+  setIsTyping: (child) => set({ isTyping: child }),
+  msg: "",
+  setMsg: (msg) => set({ msg }),
+}));

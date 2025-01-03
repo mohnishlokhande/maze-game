@@ -2,21 +2,23 @@ import PropTypes from "prop-types";
 import styles from "./Editor.module.css";
 import { useRef, useState } from "react";
 import { updateData } from "../../api/Api";
+import { useEditorStore, useMyPlayerStore } from "../../store/playerStates";
 
-export default function Editor(props) {
-  const { id, boardRef, isTyping, msg, setIsTyping, setMsg } = props;
+export default function Editor() {
+  const {
+    myPlayer: { id = "" },
+  } = useMyPlayerStore();
+  const { isTyping, setIsTyping, msg, setMsg } = useEditorStore();
 
   const textareaRef = useRef(null);
   const [rows, setRows] = useState(2);
   const handleKeyPress = (e) => {
-    console.log("##handleKeyPress", e.key);
     if (e.key === "Enter" && !e.shiftKey && msg?.trim().length > 0) {
       e.preventDefault();
       updateData(id, { isTyping: false, msg: msg });
       setIsTyping(false);
       setMsg("");
       setRows(2);
-      boardRef?.current?.focus();
     } else if (e.key === "Enter" && e.shiftKey && rows < 16) {
       setRows((prev) => prev + 1);
     } else if (e.key === "Backspace" && rows > 2) {
@@ -25,7 +27,6 @@ export default function Editor(props) {
       setIsTyping(false);
       setMsg("");
       updateData(id, { isTyping: false });
-      boardRef?.current?.focus();
     }
   };
 
@@ -50,9 +51,4 @@ export default function Editor(props) {
 
 Editor.propTypes = {
   id: PropTypes.string,
-  boardRef: PropTypes.object,
-  isTyping: PropTypes.bool,
-  setIsTyping: PropTypes.func,
-  setMsg: PropTypes.func,
-  msg: PropTypes.string,
 };

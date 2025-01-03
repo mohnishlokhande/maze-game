@@ -4,20 +4,22 @@ import styles from "../board/Board.module.css";
 import styles2 from "./Home.module.css";
 import { useEffect, useRef, useState } from "react";
 import Character from "../character";
-import Editor from "../editor";
 import { handleKeyDownEvents } from "../../utils/helper";
-import { useMyPlayerStore, usePlayersStore } from "../../store/playerStates";
+import {
+  useEditorStore,
+  useMyPlayerStore,
+  usePlayersStore,
+} from "../../store/playerStates";
 
 export default function Home() {
   const { myPlayer, setPage } = useMyPlayerStore();
   const { players } = usePlayersStore();
-  const { x, y, id } = myPlayer;
+  const { isTyping, setIsTyping } = useEditorStore();
+  const { x, y } = myPlayer;
   const boardRef = useRef(null);
   const [hint, setHint] = useState(
     "Press Enter to type message, and again Enter to send it. Esc to cancel or delete. Hold shift to move other players."
   );
-  const [isTyping, setIsTyping] = useState(false);
-  const [msg, setMsg] = useState("");
 
   const typingCallback = () => {
     boardRef?.current?.blur();
@@ -54,6 +56,12 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!isTyping) {
+      boardRef?.current?.focus();
+    }
+  }, [isTyping]);
+
   return (
     <>
       <div
@@ -79,14 +87,6 @@ export default function Home() {
           })}
         </div>
       </div>
-      <Editor
-        id={id}
-        isTyping={isTyping}
-        msg={msg}
-        boardRef={boardRef}
-        setIsTyping={setIsTyping}
-        setMsg={setMsg}
-      />
     </>
   );
 }

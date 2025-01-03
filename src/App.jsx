@@ -8,6 +8,7 @@ import { deleteData, updateData } from "./api/Api";
 import Home from "./components/home";
 import FreeWay from "./components/freeWay/FreeWay";
 import { useMyPlayerStore, usePlayersStore } from "./store/playerStates";
+import Editor from "./components/editor";
 
 function App() {
   const [newPlayer, setNewPlayer] = useState(true);
@@ -82,6 +83,7 @@ function App() {
       {page === "home" && <Home />}
       {page === "forest" && <Board rows={9} cols={12} />}
       {page === "freeway" && <FreeWay rows={10} cols={10} />}
+      <Editor />
     </>
   );
 }
