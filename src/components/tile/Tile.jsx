@@ -15,6 +15,7 @@ function Tile(props) {
     [TILE_TYPES.GAME]: "🌳",
     [TILE_TYPES.SELL_APPLE]: "💰",
     [TILE_TYPES.FREE_WAY]: "🚦",
+    [TILE_TYPES.HOME]: "🏠",
   };
 
   return (

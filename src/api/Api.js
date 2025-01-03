@@ -13,6 +13,7 @@ export const writeData = (id, player) => {
 };
 
 export const updateData = (id, obj) => {
+  console.log("##obj", id, obj);
   const dbRef = ref(database, `players/${id}`);
   update(dbRef, obj)
     .then(() => {

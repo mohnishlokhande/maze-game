@@ -84,7 +84,7 @@ export const homeBoard = [
     "empty",
   ],
   [
-    "empty",
+    "freeway",
     "empty",
     "empty",
     "empty",

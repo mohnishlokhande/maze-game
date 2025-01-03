@@ -11,7 +11,7 @@ import { useMyPlayerStore, usePlayersStore } from "../../store/playerStates";
 export default function Home() {
   const { myPlayer, setPage } = useMyPlayerStore();
   const { players } = usePlayersStore();
-  const { x, y, id, vector } = myPlayer;
+  const { x, y, id } = myPlayer;
   const boardRef = useRef(null);
   const [hint, setHint] = useState(
     "Press Enter to type message, and again Enter to send it. Esc to cancel or delete."
@@ -27,14 +27,12 @@ export default function Home() {
   const handleKeyDown = (event) => {
     event.preventDefault();
     handleKeyDownEvents(
-      id,
-      x,
-      y,
-      vector,
+      myPlayer,
       event.key,
       setPage,
       typingCallback,
-      players
+      players,
+      homeBoard
     );
   };
 

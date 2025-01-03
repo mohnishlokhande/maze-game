@@ -1,5 +1,4 @@
 import { updateData } from "../api/Api";
-import { homeBoard } from "./board";
 import { TILE_DENSITIES, TILE_TYPES } from "./constants";
 
 export const generateRandomBoard = (rows, cols) => {
@@ -45,22 +44,28 @@ export const generateRandomBoard = (rows, cols) => {
   return board;
 };
 
-const alreadyOccupied = (x, y, players) =>
-  players?.some((p) => p.x === x && p.y === y);
+const alreadyOccupied = (x, y, players, site, id) =>
+  players?.find(
+    (p) => p.x === x && p.y === y && p.page === site && p.id !== id
+  );
 
-const checkValidMove = (x, y, players) => {
-  if (x < 0 || x >= homeBoard[0].length || y < 0 || y >= homeBoard.length)
-    return 2;
-  if (homeBoard[y][x] === TILE_TYPES.WATER || alreadyOccupied(x, y, players))
-    return 0;
+const checkValidMove = (x, y, players, board, site, id = "") => {
+  const otherPlayer = alreadyOccupied(x, y, players, site, id);
+  if (otherPlayer !== undefined) return otherPlayer;
+  if (x < 0 || x >= board[0].length || y < 0 || y >= board.length) return 2;
+  if (board[y][x] === TILE_TYPES.WATER) return 0;
   return 1;
 };
 
-const onEnter = (id, x, y, setPage, players, typingCallback) => {
-  const valid = checkValidMove(x, y, players);
+const onEnter = (myPlayer, setPage, players, typingCallback, board) => {
+  const { x, y, id, page } = myPlayer;
+  const valid = checkValidMove(x, y, players, board, page, id);
   if (valid === 2) return;
-
-  switch (homeBoard[y][x]) {
+  switch (board[y][x]) {
+    case TILE_TYPES.HOME:
+      updateData(id, { page: "home" });
+      setPage("home");
+      break;
     case TILE_TYPES.GAME:
       updateData(id, { page: "forest" });
       setPage("forest");
@@ -82,15 +87,14 @@ const onEnter = (id, x, y, setPage, players, typingCallback) => {
 };
 
 export const handleKeyDownEvents = (
-  id,
-  x,
-  y,
-  vector,
+  myPlayer,
   key,
   setPage,
   typingCallback,
-  players
+  players,
+  board
 ) => {
+  const { x, y, id, vector, page } = myPlayer;
   const moveMap = {
     ArrowUp: { dir: 0, dx: 0, dy: -1 },
     ArrowRight: { dir: 1, dx: 1, dy: 0 },
@@ -103,15 +107,27 @@ export const handleKeyDownEvents = (
     const newX = x + dx;
     const newY = y + dy;
     const updatedData = { dir, vector: (vector + 1) % 4 };
+    const sidePlayer = { dir };
 
-    if (checkValidMove(newX, newY, players)) {
+    const otherPlayer = checkValidMove(newX, newY, players, board, page);
+    if (otherPlayer?.id) {
+      const newXP = newX + dx;
+      const newYP = newY + dy;
+      if (dx !== 0) sidePlayer.x = newXP;
+      if (dy !== 0) sidePlayer.y = newYP;
+      const isValid = checkValidMove(newXP, newYP, players, board, page);
+      if (isValid === 1) {
+        updateData(otherPlayer?.id, sidePlayer);
+        updatedData.x = newX;
+        updatedData.y = newY;
+      }
+    } else if (otherPlayer === 1 || otherPlayer === 2) {
       if (dx !== 0) updatedData.x = newX;
       if (dy !== 0) updatedData.y = newY;
     }
-
     updateData(id, updatedData);
   } else if (key === "Enter") {
-    onEnter(id, x, y, setPage, players, typingCallback);
+    onEnter(myPlayer, setPage, players, typingCallback, board);
   } else if (key === "Escape") {
     updateData(id, { isTyping: false, msg: "" });
   }

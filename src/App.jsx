@@ -20,6 +20,7 @@ function App() {
     for (const key in obj) {
       if (key === myPlayer.id) {
         setMyPlayer({ id: key, ...obj[key] });
+        setPage(obj[key].page);
         setNewPlayer(false);
       }
       list.push({ id: key, ...obj[key] });
@@ -31,6 +32,7 @@ function App() {
     deleteData(myPlayer?.id);
     setNewPlayer(true);
     setMyPlayer({});
+    window.location.reload();
   };
 
   const backHome = () => {
@@ -79,7 +81,7 @@ function App() {
       </div>
       {page === "home" && <Home />}
       {page === "forest" && <Board rows={9} cols={12} />}
-      {page === "freeWay" && <FreeWay rows={10} cols={10} />}
+      {page === "freeway" && <FreeWay rows={10} cols={10} />}
     </>
   );
 }

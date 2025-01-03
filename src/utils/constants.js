@@ -9,6 +9,7 @@ export const TILE_TYPES = {
   WOOD: "wood",
   SELL_APPLE: "sellApple",
   FREE_WAY: "freeway",
+  HOME: "home",
 };
 
 export const TILE_DENSITIES = {
@@ -17,7 +18,7 @@ export const TILE_DENSITIES = {
   [TILE_TYPES.EMPTY]: 0.1, // 20%
   [TILE_TYPES.ROCK]: 0.14, // 15%
   [TILE_TYPES.FOOD]: 0.15, // 5%
-  [TILE_TYPES.GAME]: 0.01, // 10%
+  [TILE_TYPES.HOME]: 0.01, // 10%
 };
 
 export const charDirection = ["moveU", "moveR", "moveD", "moveL", "dragon"];

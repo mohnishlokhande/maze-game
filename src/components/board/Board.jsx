@@ -39,7 +39,7 @@ function Board(props) {
   };
 
   const onEnter = () => {
-    if (board[activeRow][activeCol].type === TILE_TYPES.GAME) {
+    if (board[activeRow][activeCol].type === TILE_TYPES.HOME) {
       updateData(myPlayer?.id, { page: "home" });
       setPage("home");
     }
@@ -126,15 +126,6 @@ function Board(props) {
     >
       <div> Score: {score}</div>
       <div className={styles.board}>
-        {/* <div
-          className={`${styles.mycharacter} ${
-            styles[charDirection[alignment]]
-          }`}
-          style={{
-            transform: `translate(${activeCol * 6}rem, ${activeRow * 6}rem)`,
-            backgroundPosition: `${vector * -44}px 0`,
-          }}
-        /> */}
         {players?.map((p) => {
           return <Character key={p.id} p={p} site="forest" />;
         })}
