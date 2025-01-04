@@ -3,13 +3,14 @@ import Tile from "../tile";
 import styles from "../board/Board.module.css";
 import PropTypes from "prop-types";
 import { TILE_TYPES } from "../../utils/constants";
-import Character from "../character";
 import {
   useEditorStore,
   useMyPlayerStore,
   usePlayersStore,
 } from "../../store/playerStates";
 import { handleKeyDownEvents } from "../../utils/helper";
+import Car from "../car";
+import { updateData } from "../../api/Api";
 
 function FreeWay(props) {
   const { rows, cols } = props;
@@ -47,6 +48,9 @@ function FreeWay(props) {
       board
     );
   };
+  const changeColor = (e) => {
+    updateData(myPlayer.id, { carColor: e.target.name });
+  };
 
   useEffect(() => {
     if (!isTyping) {
@@ -67,8 +71,23 @@ function FreeWay(props) {
       ref={boardRef}
       className={styles.board}
     >
+      <div
+        className={styles.row}
+        style={{ columnGap: "1rem", padding: "1rem" }}
+      >
+        <div>Color:</div>
+        <button onClick={changeColor} name="green" className="btn">
+          Green
+        </button>
+        <button onClick={changeColor} name="red" className="btn">
+          Red
+        </button>
+        <button onClick={changeColor} name="blue" className="btn">
+          Blue
+        </button>
+      </div>
       {players?.map((p) => {
-        return <Character key={p.id} p={p} site="freeway" />;
+        return <Car key={p.id} p={p} site="freeway" />;
       })}
       {board.map((row, rowIndex) => {
         return (

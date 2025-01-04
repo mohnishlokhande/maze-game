@@ -1,0 +1,85 @@
+.car {
+  /* margin: 1.25rem; */
+  padding: 1rem;
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  transition: transform 0.45s ease-out;
+  /* clip-path: inset(0px 72px 0px 0px); */
+}
+.car[data-color="red"] {
+  background: url(/car/carRed.png) no-repeat center center / contain;
+}
+.car[data-color="green"] {
+  background: url(/car/carGreen.png) no-repeat center center / contain;
+}
+.car[data-color="blue"] {
+  background: url(/car/carBlue.png) no-repeat center center / contain;
+}
+
+.name {
+  position: absolute;
+  min-width: 4rem;
+  text-align: center;
+  transition: transform 0.45s ease;
+  font-size: small;
+}
+.msgContainer {
+  position: absolute;
+  top: 4px;
+  left: 60px;
+  transition: transform 0.45s ease-out;
+  background-color: #fff;
+  color: #333;
+  border: 2px solid #d67d5c;
+  border-radius: 10px;
+  padding: 3px 6px;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  /* min-width: 45px; */
+  max-width: 100px;
+}
+.msg {
+  display: flex;
+  align-items: center;
+  white-space: pre-wrap;
+  font-size: x-small;
+}
+.msgArrow {
+  position: absolute;
+  left: -7px;
+  top: 14px;
+  border-style: solid;
+  border-width: 6px;
+  border-color: transparent transparent transparent #d67d5c;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%) translateY(-50%) rotate(170deg);
+}
+.typing-container {
+  font-size: 2rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.typing {
+  display: inline-block;
+  font-weight: bold;
+  color: #333;
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+    clip-path: inset(0px 0px 0px 0px);
+  }
+  50% {
+    opacity: 0.5;
+    clip-path: inset(0px 5px 0px 0px);
+  }
+}
